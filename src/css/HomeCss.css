@@ -1,0 +1,56 @@
+#red-button {
+    height: 15px;
+    width: 15px;
+    background-color: red;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+#green-button {
+    height: 15px;
+    width: 15px;
+    background-color: greenyellow;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+#yellow-button {
+    height: 15px;
+    width: 15px;
+    background-color: yellow;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+  }
+
+  #parent-window {
+    width: fit-content;
+  }
+
+#upper-bar-window {
+    background-color: white;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+#main-body-window {
+    background-color: #6193C4;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    height: 360px;
+    width: fit-content;
+}
+
+.controls {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 50%;
+  transform: translateX(-50%);
+  height: 80px;
+  display: flex;
+  align-items: center;
+}
+  

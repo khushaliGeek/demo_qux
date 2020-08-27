@@ -6,7 +6,7 @@ class Header extends React.Component {
     render() {
         return (
             <div className="p-2">
-                <img src={logo} height="64" aly="logo-image" />
+                <img src={logo} height="64" alt="logo" />
             </div>
         );
     }
