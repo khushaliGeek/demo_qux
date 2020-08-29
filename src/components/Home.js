@@ -31,28 +31,23 @@ class Home extends React.Component {
             authorName: data.authorName,
             authorProfile: data.authorProfile
         });
-
-        console.log(this.state.portalProfile);
     }
 
     handlePhotoData(key, value) {
-        console.log(value);
+        this.setState({
+            [key]: value
+        });
     }
 
     render() {
         return (
             <div className="row">
-                <div className="col-md-6 col-lg-6 container-fluid" style={{ backgroundColor: 'white' }}>
+                <div className="col-md-6 col-lg-6 container" style={{ backgroundColor: 'white' }}>
                     <Header />
                     <PortalGenerator onFormSubmit={this.handleSubmitData.bind(this)} onPhotoSubmit={this.handlePhotoData.bind(this)} />
                 </div>
                 <div className="col-md-6 col-lg-6 container-fluid" style={{ backgroundColor: '#F9FAFC' }}>
-                    {
-                        this.state.portalProfile ? 
-                        <PortalPreview portalProfile={this.state.portalProfile} />
-                        :
-                        <PortalPreview portalProfile="" />
-                    }
+                    <PortalPreview portalProfile={this.state.portalProfile || null} portalBackground={this.state.portalBackground || null} />
                 </div>
             </div>
         );

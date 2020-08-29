@@ -1,5 +1,5 @@
 import React from 'react';
-import { Form, Col } from 'react-bootstrap';
+import { Form, Col, Image } from 'react-bootstrap';
 import CropModal from './CropModal';
 
 class PortalGenerator extends React.Component {
@@ -17,6 +17,9 @@ class PortalGenerator extends React.Component {
             portalBackground: null,
             authorName: null,
             authorProfile: null,
+            profileError: null,
+            backgroundError: null,
+            authorError: null,
             crop: { x: 0, y: 0 },
             zoom: 1,
             aspect: 3 / 3,
@@ -56,10 +59,19 @@ class PortalGenerator extends React.Component {
 
       }
 
-      updatePhotoState(key, value) {   
+      updatePhotoState(key, value, errorKey, photoSize) {   
           this.setState({
-              [key]: null
+              [key]: null,
+              [errorKey]: null
           }); 
+        if(value.size > photoSize)
+        {
+            this.setState({
+                [errorKey]: `Photo size should be less than ${photoSize / 1024}KB.`
+            });
+
+            return;
+        }
         let reader = new FileReader();
         let url = reader.readAsDataURL(value);
         reader.onloadend = async function (e) {
@@ -67,12 +79,12 @@ class PortalGenerator extends React.Component {
                 [key]: reader.result,
             });
           }.bind(this);
+        console.log(value);
         this.props.onPhotoSubmit(key, value);
       }
 
       handleSubmit(e) {
           e.preventDefault();
-          console.log(this.state);
           this.props.onFormSubmit(this.state);
       }
 
@@ -82,19 +94,19 @@ class PortalGenerator extends React.Component {
         let crop = '';
         let key = '';
 
-        if(data.type == "profile")
+        if(data.type === "profile")
         {
             pixels = 'profilePixels';
              key = 'portalProfile';
             crop = 'profileCrop';
         }
-        else if(data.type == "author")
+        else if(data.type === "author")
         {
              pixels = 'authorPixels';
             key = 'authorProfile';
              crop = 'authorCrop';
         }
-        else if(data.type == "background")
+        else if(data.type === "background")
         {
             pixels = 'backgroundPixels';
              key = 'portalBackground';
@@ -105,11 +117,10 @@ class PortalGenerator extends React.Component {
             [crop]: false,
             [pixels]: data.pixels,
             [key]: data.image,
-          });  
+          }); 
       }
 
     render() {
-        const { profilePixels, backgroundPixels, authorPixels } = this.state;
         return (
             <div className="p-2">
                 <h5>
@@ -149,23 +160,24 @@ class PortalGenerator extends React.Component {
                         </Form.Group> 
                     </Form.Row>
                     {/* profile image for portal */}
-                    {
-                        this.state.portalProfile ?
-                        <img  alt="profile" src={this.state.portalProfile} height="120" />
-                        :
-                        null
-                    }
-                    <div className="justify-content pl-3">
+                    <div className="justify-content-between row pl-3">
+                        {
+                            this.state.portalProfile ?
+                            <div className="text-center">
+                                <Image  alt="profile" src={this.state.portalProfile} height="120" rounded />
+                            </div>
+                            :
+                            null
+                        }
                         <Form.Group as={Col} controlId="formPortalProfile">
                             <Form.Label>Portal Profile Image</Form.Label>
                             <Form.File 
                                 id="custom-file"
-                                label="Portal profile image"
+                                label="Portal profile"
                                 accept="image/*"
                                 custom
                                 onChange={ e => {
-                                    this.updatePhotoState('portalProfile', e.target.files[0]);
-                                    // this.updateState('profileCrop', true);
+                                    this.updatePhotoState('portalProfile', e.target.files[0], 'profileError', 500*1024);
                                     this.setState({ profileCrop: true });
                                 } }
                             />
@@ -173,6 +185,8 @@ class PortalGenerator extends React.Component {
                                 Upload Portal Profile Image (1000px X 1000px)
                                 <br />
                                 <strong>(Max size 500KB)</strong>
+                                <br />
+                                <strong className="text-danger">{this.state.profileError}</strong>
                             </Form.Text>
                         </Form.Group>
                         {
@@ -184,22 +198,22 @@ class PortalGenerator extends React.Component {
                         
                     </div>
                     {/* background image for portal */}
-                    {
-                        this.state.portalBackground ?
-                        <img  alt="bakground" src={this.state.portalBackground} height="135" width="240" />
-                        :
-                        null
-                    }
-                    <div className="justify-content pl-3">
+                    <div className="justify-content row pl-3">
+                        {
+                            this.state.portalBackground ?
+                            <Image  alt="bakground" src={this.state.portalBackground} height="135" width="240" rounded />
+                            :
+                            null
+                        }
                         <Form.Group as={Col} controlId="formPortalBackground">
                             <Form.Label>Portal Background Image</Form.Label>
                             <Form.File 
                                 id="custom-file"
-                                label="Portal Background image"
+                                label="Portal Background"
                                 accept="image/*"
                                 custom
                                 onChange={e => {
-                                    this.updatePhotoState('portalBackground', e.target.files[0]);
+                                    this.updatePhotoState('portalBackground', e.target.files[0], 'backgroundError', 1024*1024);
                                     this.updateState('backgroundCrop', true);
                                 }}
                             />
@@ -207,6 +221,8 @@ class PortalGenerator extends React.Component {
                                 Upload background Image (1920px X 1080px)
                                 <br />
                                 <strong>(Max size 1MB)</strong>
+                                <br />
+                                <strong className="text-danger">{this.state.backgroundError}</strong>
                             </Form.Text>
                         </Form.Group>
                         {
@@ -216,7 +232,7 @@ class PortalGenerator extends React.Component {
                             null
                         }
                     </div>
-                    <h5 className="mb-4">
+                    <h5 className="my-4">
                         Authors
                     </h5>
                     <Form.Group as={Col} controlId="formAuthorName">
@@ -224,29 +240,31 @@ class PortalGenerator extends React.Component {
                         <Form.Control placeholder="Author Name" onChange={e => this.updateState('authorName', e.target.value)} />
                     </Form.Group>
                     {/* author profile image */}
-                    {
-                        this.state.authorProfile ? 
-                        <img alt="author" src={this.state.authorProfile} height="120" />
-                        :
-                        null
-                    }
-                    <div className="justify-content pl-3">
+                    <div className="justify-content row pl-3">
+                        {
+                            this.state.authorProfile ? 
+                            <Image alt="author" src={this.state.authorProfile} height="120" rounded />
+                            :
+                            null
+                        }
                         <Form.Group as={Col} controlId="formAuthorProfile">
                             <Form.Label>Author Profile Image</Form.Label>
                             <Form.File 
                                 id="custom-file"
-                                label="Author profile image"
+                                label="Author profile"
                                 accept="image/*"
                                 custom
                                 onChange={e => {
-                                    this.updatePhotoState('authorProfile', e.target.files[0]);
+                                    this.updatePhotoState('authorProfile', e.target.files[0], 'authorError', 500*1024);
                                     this.updateState('authorCrop', true);
                                 }}
                             />
                             <Form.Text className="text-muted">
-                                Upload Portal Profile Image (500px X 500px)
+                                Upload Author Profile Image (500px X 500px)
                                 <br />
                                 <strong>(Max size 500KB)</strong>
+                                <br />
+                                <strong className="text-danger">{this.state.authorError}</strong>
                             </Form.Text>
                         </Form.Group>
                         {

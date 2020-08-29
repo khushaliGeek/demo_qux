@@ -111,7 +111,6 @@ class CropModal extends React.Component {
             image: this.state.croppedImageUrl,
             type: this.props.type
         }
-        console.log(data);
         this.props.onClose(data);
       }
 

@@ -27,20 +27,22 @@
 
   #parent-window {
     width: fit-content;
+    aspect-ratio: 16/9;
   }
 
 #upper-bar-window {
     background-color: white;
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
 }
 
 #main-body-window {
     background-color: #6193C4;
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-    height: 360px;
-    width: fit-content;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    /* height: 360px;
+    width: '80%'; */
+    aspect-ratio: 16/9;
 }
 
 .controls {
@@ -53,4 +55,3 @@
   display: flex;
   align-items: center;
 }
-  
