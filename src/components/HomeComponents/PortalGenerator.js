@@ -112,6 +112,10 @@ class PortalGenerator extends React.Component {
              key = 'portalBackground';
             crop = 'backgroundCrop';
         }
+        else
+        {
+            return;
+        }
         this.props.onPhotoSubmit(key, data.image);
           this.setState({
             [crop]: false,
@@ -120,12 +124,37 @@ class PortalGenerator extends React.Component {
           }); 
       }
 
+      clearSelection(e, id, key) {
+          e.preventDefault();
+          this.setState({
+              [key]: null
+          });
+          this.props.onPhotoSubmit(key, null);
+          document.getElementById(id).value = null;
+      }
+
+      componentDidMount() {
+        let portalProfile = localStorage.getItem('portalProfile') || '';
+        let portalBackground = localStorage.getItem('portalBackground') || '';
+        if(portalProfile !== '') {
+            this.setState({
+                portalProfile,
+            });
+        }
+        if(portalBackground !== '') {
+            this.setState({
+                portalBackground
+            });
+        }
+      }
+
     render() {
+        
         return (
             <div className="p-2">
-                <h5>
+                <strong>
                     Portal Generator
-                </h5>
+                </strong>
 
                 <Form className="p-2" onSubmit={(e) => this.handleSubmit(e)}>
                     <Form.Row>
@@ -160,11 +189,13 @@ class PortalGenerator extends React.Component {
                         </Form.Group> 
                     </Form.Row>
                     {/* profile image for portal */}
-                    <div className="justify-content-between row pl-3">
+                    <div className="justify-content row pl-3">
                         {
                             this.state.portalProfile ?
                             <div className="text-center">
                                 <Image  alt="profile" src={this.state.portalProfile} height="120" rounded />
+                                <br />
+                                <input type="button" className="btn btn-danger m-1" value="Remove" onClick={e => this.clearSelection(e, 'custom-file-profile', 'portalProfile')} />
                             </div>
                             :
                             null
@@ -172,7 +203,7 @@ class PortalGenerator extends React.Component {
                         <Form.Group as={Col} controlId="formPortalProfile">
                             <Form.Label>Portal Profile Image</Form.Label>
                             <Form.File 
-                                id="custom-file"
+                                id="custom-file-profile"
                                 label="Portal profile"
                                 accept="image/*"
                                 custom
@@ -201,14 +232,18 @@ class PortalGenerator extends React.Component {
                     <div className="justify-content row pl-3">
                         {
                             this.state.portalBackground ?
-                            <Image  alt="bakground" src={this.state.portalBackground} height="135" width="240" rounded />
+                            <div className="text-center">
+                                <Image  alt="bakground" src={this.state.portalBackground} height="135" width="240" rounded />
+                                <br />
+                                <input type="button" className="btn btn-danger m-1" value="Remove" onClick={e => this.clearSelection(e, 'custom-file-background', 'portalBackground')} />
+                            </div>
                             :
                             null
                         }
                         <Form.Group as={Col} controlId="formPortalBackground">
                             <Form.Label>Portal Background Image</Form.Label>
                             <Form.File 
-                                id="custom-file"
+                                id="custom-file-background"
                                 label="Portal Background"
                                 accept="image/*"
                                 custom
@@ -232,9 +267,10 @@ class PortalGenerator extends React.Component {
                             null
                         }
                     </div>
-                    <h5 className="my-4">
+                    <strong className="my-4">
                         Authors
-                    </h5>
+                    </strong>
+                    {/* <br /> */}
                     <Form.Group as={Col} controlId="formAuthorName">
                         <Form.Label>Author Name</Form.Label>
                         <Form.Control placeholder="Author Name" onChange={e => this.updateState('authorName', e.target.value)} />
@@ -243,14 +279,18 @@ class PortalGenerator extends React.Component {
                     <div className="justify-content row pl-3">
                         {
                             this.state.authorProfile ? 
-                            <Image alt="author" src={this.state.authorProfile} height="120" rounded />
+                            <div className="text-center">
+                                <Image alt="author" src={this.state.authorProfile} height="120" rounded />
+                                <br />
+                                <input type="button" className="btn btn-danger m-1" value="Remove" onClick={e => this.clearSelection(e, 'custom-file-author', 'authorProfile')} />
+                            </div>
                             :
                             null
                         }
                         <Form.Group as={Col} controlId="formAuthorProfile">
                             <Form.Label>Author Profile Image</Form.Label>
                             <Form.File 
-                                id="custom-file"
+                                id="custom-file-author"
                                 label="Author profile"
                                 accept="image/*"
                                 custom
@@ -275,13 +315,10 @@ class PortalGenerator extends React.Component {
                         }
                     </div>
 
-                    <div>
+                    <div className="p-2">
                         <button type="submit" className="btn btn-primary w-50" style={{ backgroundColor: '#6193C4' }}><b>SAVE</b></button>
                     </div>
                 </Form>
-
-
-                
             </div>
         );
     }

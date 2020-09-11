@@ -20,34 +20,34 @@ class PortalPreview extends React.Component {
     }
 
     render() {
-        if(this.state.portalProfile !== this.props.portalProfile)
-        {
-            this.setState({
-                portalProfile: this.props.portalProfile
-            });
-        }
-        if(this.state.portalBackground !== this.props.portalBackground)
-        {
-            this.setState({
-                portalBackground: this.props.portalBackground
-            });
-        }
+        let portalProfile = localStorage.getItem('portalProfile') || '';
+        let portalBackground = localStorage.getItem('portalBackground') || '';
+        // if(portalProfile !== '') {
+        //     this.setState({
+        //         portalProfile
+        //     });
+        // }
+        // if(portalBackground !== '') {
+        //     this.setState({
+        //         portalBackground
+        //     });
+        // }
         return (
             <div className="p-2 pt-4">
                 <div className="my-5" id="parent-window">
-                    <h5>
+                    <strong>
                         Preview
-                    </h5>
+                    </strong>
                     <UpperBarWindow />
-                    <div className="p-2" id="main-body-window" style={{ backgroundImage: `url(${this.props.portalBackground})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>
-                        <div className="row justify-content-between p-4 mt-5">
+                    <div className="p-2" id="main-body-window" style={{ backgroundImage: `url(${portalBackground})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>
+                        <div className="row justify-content-between p-4 mt-3">
                             <div className="col-4 align-self-end">
-                                <div style={{ height: 200, width: 200, backgroundColor: 'white' }}>
-                                    <Image src={this.props.portalProfile} height="200" width="200" rounded alt="profile" />
+                                <div className="rounded" style={{ height: 200, width: 200, backgroundColor: 'white' }}>
+                                    <Image src={portalProfile} height="200" width="200" rounded alt="profile" />
                                 </div>
                             </div>
                             {
-                                this.props.portalBackground !== null ?
+                                portalBackground !== '' ?
                                 <div className="col-8 invisible">
                                     Background Image 1920px X 1080px
                                 </div>
@@ -58,28 +58,30 @@ class PortalPreview extends React.Component {
                             }
                             
                         </div>
+                        {/* portal thumbnails */}
                         <div>
-
+                            
                         </div>
                     </div>
                 </div>
                 
                 <div>
-                    <h5>
+                    <strong>
                         Add Portal Type
-                    </h5>
+                    </strong>
+                    <br />
                     <small style={{ color: 'grey' }}>
                         Click to add portals
                     </small>
 
                     <div className="row p-2 mx-auto">
                         <div className="p-4 m-2 mx-auto" style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
-                            <a href="#" className="text-center">
+                            <a href="/newPortal" className="text-center">
                                 <img src={plus_sign} height="50" />
                             </a>
                         </div>
                         <div className="p-4 m-2 mx-auto" style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
-                            <a href="#" className="text-center">
+                            <a href="/newPortal" className="text-center">
                                 <img src={plus_sign} height="50" />
                             </a>
                         </div>

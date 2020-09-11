@@ -12,7 +12,6 @@ class CropModal extends React.Component {
         this.canvas = {};
 
         this.state = {
-            // crop: { x: 0, y: 0 },
             crop: {
                 unit: '%',
                 width: 30,
@@ -54,6 +53,7 @@ class CropModal extends React.Component {
       };
 
       onCropChange = (crop, percentCrop) => {
+        console.log(percentCrop);
             this.setState({ crop });
         };
 
@@ -62,7 +62,7 @@ class CropModal extends React.Component {
               const croppedImageUrl = await this.getCroppedImg(
                 this.imageRef,
                 crop,
-                'newFile.jpeg'
+                'newFile.jpg'
               );
               this.setState({ croppedImageUrl });
             }
@@ -72,9 +72,9 @@ class CropModal extends React.Component {
             const canvas = document.createElement('canvas');
             const scaleX = image.naturalWidth / image.width;
             const scaleY = image.naturalHeight / image.height;
+            const ctx = canvas.getContext('2d');
             canvas.width = crop.width;
             canvas.height = crop.height;
-            const ctx = canvas.getContext('2d');
         
             ctx.drawImage(
               image,
@@ -95,8 +95,10 @@ class CropModal extends React.Component {
                   return;
                 }
                 blob.name = fileName;
+
                 window.URL.revokeObjectURL(this.fileUrl);
                 this.fileUrl = window.URL.createObjectURL(blob);
+                console.log(this.fileUrl);
                 resolve(this.fileUrl);
               }, 'image/jpeg');
             });
@@ -115,14 +117,14 @@ class CropModal extends React.Component {
       }
 
     render() {
-        const { src, crop, zoom, aspect, croppedImageUrl } = this.state;
+        const { src, crop, croppedImageUrl } = this.state;
         return (
             <div>
                 <Modal
                     show={this.state.show}
                     onHide={this.handleClose}
                     backdrop="static"
-                    keyboard={false}
+                    keyboard={true}
                 >
                     <Modal.Header>
                         <Modal.Title>Crop Image</Modal.Title>
@@ -138,9 +140,9 @@ class CropModal extends React.Component {
                                 onChange={this.onCropChange}
                             />
                         )}
-                        {croppedImageUrl && (
+                        {/* {croppedImageUrl && (
                             <img alt="Crop" style={{ maxWidth: '100%' }} src={croppedImageUrl} />
-                        )}
+                        )} */}
                     </Modal.Body>
                     <Modal.Footer>
                     <Button variant="secondary" onClick={this.handleClose}>

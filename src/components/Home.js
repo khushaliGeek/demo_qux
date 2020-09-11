@@ -37,16 +37,17 @@ class Home extends React.Component {
         this.setState({
             [key]: value
         });
+        localStorage.setItem(key, value);
     }
 
     render() {
         return (
             <div className="row">
-                <div className="col-md-6 col-lg-6 container" style={{ backgroundColor: 'white' }}>
+                <div className="col-md-6 col-lg-6" style={{ backgroundColor: 'white' }}>
                     <Header />
                     <PortalGenerator onFormSubmit={this.handleSubmitData.bind(this)} onPhotoSubmit={this.handlePhotoData.bind(this)} />
                 </div>
-                <div className="col-md-6 col-lg-6 container-fluid" style={{ backgroundColor: '#F9FAFC' }}>
+                <div className="col-md-6 col-lg-6" style={{ backgroundColor: '#F9FAFC' }}>
                     <PortalPreview portalProfile={this.state.portalProfile || null} portalBackground={this.state.portalBackground || null} />
                 </div>
             </div>

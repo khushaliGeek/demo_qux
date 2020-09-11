@@ -40,9 +40,14 @@
     background-color: #6193C4;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
-    /* height: 360px;
-    width: '80%'; */
     aspect-ratio: 16/9;
+}
+
+#portal-body-window {
+  background-color: #6193C4;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  aspect-ratio: 16/9;
 }
 
 .controls {
@@ -54,4 +59,9 @@
   height: 80px;
   display: flex;
   align-items: center;
+}
+
+.scrollable-playlists {
+  height: 250px;
+  overflow-y: scroll;
 }
