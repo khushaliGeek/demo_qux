@@ -59,8 +59,36 @@ class PortalPreview extends React.Component {
                             
                         </div>
                         {/* portal thumbnails */}
-                        <div>
+                        <div className="row justify-content-center px-5 portals-type">
+                            <div className="p-4 m-2 rounded col-2 mx-auto" style={{ backgroundColor: 'skyblue' }}>
+                                <p className="text-center my-auto">
+                                    Portal Type
+                                </p>
+                            </div>
                             
+                            <div className="p-4 m-2 rounded col-2 mx-auto" style={{ backgroundColor: 'skyblue' }}>
+                                <p className="text-center my-auto">
+                                    Portal Type
+                                </p>
+                            </div>
+
+                            <div className="p-4 m-2 rounded col-2 mx-auto" style={{ backgroundColor: 'skyblue' }}>
+                                <p className="text-center my-auto">
+                                    Portal Type
+                                </p>
+                            </div>
+
+                            <div className="p-4 m-2 rounded col-2 mx-auto" style={{ backgroundColor: 'skyblue' }}>
+                                <p className="text-center my-auto">
+                                    Portal Type
+                                </p>
+                            </div>
+
+                            <div className="p-4 m-2 rounded col-2 mx-auto" style={{ backgroundColor: 'skyblue' }}>
+                                <p className="text-center my-auto">
+                                    Portal Type
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -141,8 +141,20 @@ class AddPortal extends React.Component {
         });
     }
 
-    addPlaylistIcon(data) {
+    addPlaylistIcon(key, value, index) {
+        let data = this.state.playlists;
+        let playlist = data[index-1];
+        
+        if(!playlist) {
+            return;
+        }
+        playlist.icon = value;
+        playlist.iconCrop = true;
+        data[index-1] = playlist;
 
+        this.setState({
+            playlists: data
+        });
     }
 
     addPlayListData(key, value, index) {

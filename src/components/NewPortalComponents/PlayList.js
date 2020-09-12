@@ -1,6 +1,7 @@
 import React from 'react';
-import { Form, Col } from 'react-bootstrap';
+import { Form, Col, Image } from 'react-bootstrap';
 import { TrashFill } from 'react-bootstrap-icons';
+import CropModal from '../HomeComponents/CropModal';
 
 class PlayList extends React.Component {
 
@@ -8,8 +9,51 @@ class PlayList extends React.Component {
         super(props);
 
         this.state = {
-            iconCrop: false
+            iconCrop: false,
+            icon: null,
+            iconError: null
         };
+    }
+
+    updatePhotoState(key, value, errorKey, photoSize, index) {   
+        this.setState({
+            [key]: null,
+            [errorKey]: null
+        }); 
+      if(value.size > photoSize)
+      {
+          this.setState({
+              [errorKey]: `Photo size should be less than ${photoSize / 1024}KB.`
+          });
+
+          return;
+      }
+      let reader = new FileReader();
+      let url = reader.readAsDataURL(value);
+      reader.onloadend = async function (e) {
+          await this.setState({
+              [key]: reader.result,
+          });
+        }.bind(this);
+      this.props.onPhoto(key, value, index);
+    }
+
+    onModalClose = (data) => {
+
+        // this.props.onPhotoSubmit(key, data.image);
+          this.setState({
+            iconCrop: false,
+            icon: data.image,
+          }); 
+      }
+
+    clearSelection(e, id, key) {
+        e.preventDefault();
+        this.setState({
+            [key]: null
+        });
+        // this.props.onPhotoSubmit(key, null);
+        document.getElementById(id).value = null;
     }
 
     render() {
@@ -27,6 +71,17 @@ class PlayList extends React.Component {
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
+                    <div className="justify-content row pl-3">
+                        {
+                            this.state.icon ?
+                            <div className="text-center">
+                                <Image  alt="Tile" src={this.state.icon} height="120" rounded />
+                                <br />
+                                <input type="button" className="btn btn-danger m-1" value="Remove" onClick={e => this.clearSelection(e, iconID, 'icon')} />
+                            </div>
+                            :
+                            null
+                        }
                     <Form.Group as={Col} controlId="formPortalProfile">
                         <Form.Label>Upload Playlist Tile Icon</Form.Label>
                         <Form.File 
@@ -35,8 +90,8 @@ class PlayList extends React.Component {
                             accept="image/*"
                             custom
                             onChange={ e => {
-                                // this.updatePhotoState('portalTile', e.target.files[0], 'tileError', 500*1024);
-                                // this.setState({ portalTileCrop: true });
+                                this.updatePhotoState('icon', e.target.files[0], 'iconError', 500*1024, this.props.count);
+                                // this.setState({ iconCrop: true });
                             }}
                         />
                         <Form.Text className="text-muted">
@@ -44,10 +99,17 @@ class PlayList extends React.Component {
                             <br />
                             <strong>(Max size 500KB)</strong>
                             <br />
-                            <strong className="text-danger">{this.props.playlist.iconError}</strong>
+                            <strong className="text-danger">{this.state.iconError}</strong>
                         </Form.Text>
                     </Form.Group>
-                    <div className="my-auto">
+                        {
+                            this.state.icon && this.props.playlist.iconCrop ? 
+                            <CropModal type="icon" aspect={ 1 } imgSrc={this.state.icon} onClose={this.onModalClose} />
+                            :
+                            null
+                        }
+                    </div>
+                    <div className="my-auto p-2">
                         <TrashFill color="red" size={30} style={{ cursor: 'pointer' }} onClick={e => this.props.onRemove(this.props.count)} />
                     </div>
                 </Form.Row>

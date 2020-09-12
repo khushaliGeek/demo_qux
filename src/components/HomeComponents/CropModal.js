@@ -53,7 +53,6 @@ class CropModal extends React.Component {
       };
 
       onCropChange = (crop, percentCrop) => {
-        console.log(percentCrop);
             this.setState({ crop });
         };
 

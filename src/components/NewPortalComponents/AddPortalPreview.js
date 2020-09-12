@@ -22,7 +22,7 @@ class AddPortalPreview extends React.Component {
         
         return (
             <div className="p-2 py-4">
-                <div className="my-5" id="parent-window">
+                <div className="my-5" id="parent-portal-window">
                     <strong>
                         Preview
                     </strong>
@@ -37,7 +37,7 @@ class AddPortalPreview extends React.Component {
                             <div className="col-2 invisible">
                                 Background image will be 
                             </div>
-                            <div className="align-content-end mx-auto col-6">
+                            <div className="col-6">
                                 <div className="row m-1 rounded" style={{ height: 50, width: 150, backgroundColor: 'skyblue' }}>
                                     <div className="rounded my-auto ml-1" style={{ height: 40, width: 40, backgroundColor: 'white' }}>
                                         <Image src={portalProfile} height="40" width="40" rounded alt="icon" />

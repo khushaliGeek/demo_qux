@@ -27,6 +27,13 @@
 
   #parent-window {
     width: fit-content;
+    height: fit-content;
+    aspect-ratio: 16/9;
+  }
+
+  #parent-portal-window {
+    width: fit-content;
+    height: fit-content;
     aspect-ratio: 16/9;
   }
 
@@ -47,6 +54,7 @@
   background-color: #6193C4;
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
+  width: 100%;
   aspect-ratio: 16/9;
 }
 
@@ -64,4 +72,9 @@
 .scrollable-playlists {
   height: 250px;
   overflow-y: scroll;
+}
+
+.portals-type {
+  transform: translateY(-40%);
+  align-items: center;
 }
