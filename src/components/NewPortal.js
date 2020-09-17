@@ -35,6 +35,7 @@ class NewPortal extends React.Component {
         if(!portalSource && !portalTile && playlists.length < 1) {
             return;
         }
+        // coming data are pushed into the portals array
         portals.push(portal);
         this.setState({
             portals
@@ -42,8 +43,7 @@ class NewPortal extends React.Component {
         let portals_data = localStorage.getItem('portals') || null;
         let portals_js = null;
         portals_js = JSON.parse(portals_data);
-        console.log(updateData);
-
+        // updatable data are handled here
         if(updateData) {
             console.log('update portal', portals_js[updateIndex]);
             if(portals_js[updateIndex]) {
@@ -51,6 +51,7 @@ class NewPortal extends React.Component {
                 localStorage.setItem('portals', JSON.stringify(portals_js));
             }
         } else {
+            // new data are added to the local store
             if(portals_data) {
                 portals_js.push(portal);
                 localStorage.setItem('portals', JSON.stringify(portals_js));

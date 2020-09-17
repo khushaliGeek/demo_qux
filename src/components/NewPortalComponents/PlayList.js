@@ -27,10 +27,6 @@ class PlayList extends React.Component {
         }
     }
 
-    // shouldComponentUpdate() {
-    //     return true;
-    // }
-
     updatePhotoState(key, value, errorKey, photoSize, index) {   
         this.setState({
             [key]: null,

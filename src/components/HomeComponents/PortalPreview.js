@@ -163,35 +163,9 @@ class PortalPreview extends React.Component {
                             :
                             null
                         }
-
                         {
                             this.renderSubPortalLinks()
                         }
-                        {/* <div className="p-4 m-2 mx-auto" style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
-                            <Link to="/newPortal" className="text-center">
-                                <img src={plus_sign} height="50" alt="add" />
-                            </Link>
-                        </div>
-                        <div className="p-4 m-2 mx-auto" style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
-                            <Link to="/newPortal" className="text-center">
-                                <img src={plus_sign} height="50" alt="add" />
-                            </Link>
-                        </div>
-                        <div className="p-4 m-2 mx-auto" style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
-                            <Link to="/newPortal" className="text-center">
-                                <img src={plus_sign} height="50" alt="add" />
-                            </Link>
-                        </div>
-                        <div className="p-4 m-2 mx-auto" style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
-                            <Link to="/newPortal" className="text-center">
-                                <img src={plus_sign} height="50" alt="add" />
-                            </Link>
-                        </div>
-                        <div className="p-4 m-2 mx-auto" style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
-                            <Link to="/newPortal" className="text-center">
-                                <img src={plus_sign} height="50" alt="add" />
-                            </Link>
-                        </div> */}
                     </div>
                 </div>
             </div>

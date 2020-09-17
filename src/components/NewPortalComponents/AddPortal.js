@@ -3,7 +3,7 @@ import { ChevronLeft, PlusCircleFill } from 'react-bootstrap-icons';
 import { Form, Col, Image } from 'react-bootstrap';
 import CropModal from '../HomeComponents/CropModal';
 import PlayList from './PlayList';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 
 class AddPortal extends React.Component {
 
@@ -20,10 +20,11 @@ class AddPortal extends React.Component {
             playlists: [],
             playlistsCount: 1,
             updateData: false,
-            updateIndex: null
+            updateIndex: null,
+            redirectFlag: false
         };
     }
-    
+
     componentDidMount() {
         if(this.props.updateData) {
             let { portalSource, portalDescription, portalTile, portalCategory, playlists } = this.props.updateData.item;
@@ -200,6 +201,23 @@ class AddPortal extends React.Component {
         });
     }
 
+    saveData(flag) {
+        this.props.onSubmitData(this.state);
+
+        if(!flag) {
+            this.setState({
+                redirectFlag: true
+            });
+        }
+    }
+
+    renderRedirect() {
+        console.log('renderFlag', this.state.redirectFlag);
+        if(this.state.redirectFlag) {
+            return <Redirect to="/" />
+        }
+    }
+
     render() {
         return (
             <div className="container">
@@ -288,8 +306,11 @@ class AddPortal extends React.Component {
                         </div>
                     </div>
                     <div className="p-2 row justify-content-center w-100">
-                        <button type="submit" className="btn btn-primary m-1 p-2 px-5" style={{ backgroundColor: '#6193C4' }}><b>SAVE AND BACK TO HOME</b></button>
-                        <button type="submit" className="btn btn-success m-1 p-2 px-5" onClick={e => this.props.onSubmitData(this.state)}><b>SAVE AND CONTINUE</b></button>
+                        {
+                            this.renderRedirect()
+                        }
+                        <button type="submit" className="btn btn-primary m-1 p-2 px-5" style={{ backgroundColor: '#6193C4' }} onClick={e => this.saveData(false)}><b>SAVE AND BACK TO HOME</b></button>
+                        <button type="submit" className="btn btn-success m-1 p-2 px-5" onClick={e => this.saveData(true)}><b>SAVE AND CONTINUE</b></button>
                     </div>
                 </Form>
             </div>

@@ -23,15 +23,21 @@ class Home extends React.Component {
 
     componentDidMount() {
         let portals = localStorage.getItem('portals') || null;
+        let mainPortal = localStorage.getItem('mainPortal') || null;
         if(portals) {
             this.setState({
                 subportals: JSON.parse(portals)
             });
         }
+
+        if(mainPortal) {
+            let data = JSON.parse(mainPortal);
+            
+        }
         
     }
 
-    handleSubmitData(data) {
+    handleSubmitData(data, flag) {
         this.setState({
             portalName: data.portalName,
             portalCategory: data.portalCategory,
@@ -42,6 +48,12 @@ class Home extends React.Component {
             authorName: data.authorName,
             authorProfile: data.authorProfile
         });
+        localStorage.setItem('mainPortal', JSON.stringify(data));
+
+        // save api call only if flag is true
+        if(flag) {
+            
+        }
     }
 
     handlePhotoData(key, value) {

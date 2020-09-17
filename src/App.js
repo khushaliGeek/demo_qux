@@ -22,6 +22,7 @@ class App extends React.Component {
     localStorage.removeItem('portals');
     localStorage.removeItem('portalProfile');
     localStorage.removeItem('portalBackground');
+    localStorage.removeItem('mainPortal');
   }
 
   renderContent() {

@@ -58,6 +58,10 @@ class PortalGenerator extends React.Component {
 
       }
 
+      componentWillUnmount() {
+        this.props.onFormSubmit(this.state, false);
+      }
+
       updateCategoryState(key, e) {
         let options = e.target.options;
         let val = [];
@@ -98,7 +102,7 @@ class PortalGenerator extends React.Component {
 
       handleSubmit(e) {
           e.preventDefault();
-          this.props.onFormSubmit(this.state);
+          this.props.onFormSubmit(this.state, true);
       }
 
       onModalClose = (data) => {
