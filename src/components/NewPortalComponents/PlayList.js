@@ -9,16 +9,33 @@ class PlayList extends React.Component {
         super(props);
 
         this.state = {
-            iconCrop: false,
+            iconCrop: true,
             icon: null,
-            iconError: null
+            iconError: null,
+            updateData: false,
+            onceBit: true
         };
     }
+
+    componentDidMount() {
+        if(this.props.playlist.icon) {
+            this.setState({
+                icon: this.props.playlist.icon,
+                iconCrop: false,
+                updateData: this.props.updateData
+            });
+        }
+    }
+
+    // shouldComponentUpdate() {
+    //     return true;
+    // }
 
     updatePhotoState(key, value, errorKey, photoSize, index) {   
         this.setState({
             [key]: null,
-            [errorKey]: null
+            [errorKey]: null,
+            updateData: false
         }); 
       if(value.size > photoSize)
       {
@@ -35,47 +52,59 @@ class PlayList extends React.Component {
               [key]: reader.result,
           });
         }.bind(this);
-      this.props.onPhoto(key, value, index);
+        this.props.onPhoto('icon', value, this.props.count);
     }
 
     onModalClose = (data) => {
-
-        // this.props.onPhotoSubmit(key, data.image);
-          this.setState({
+        this.setState({
             iconCrop: false,
             icon: data.image,
-          }); 
+        });
+        this.props.onPhoto('icon', data.image, this.props.count);
       }
 
     clearSelection(e, id, key) {
         e.preventDefault();
+        // setting onceBit for false 
+        // as able to remove icon in update mode
+        if(this.state.onceBit) {
+            this.setState({
+                onceBit: false
+            });
+        }
         this.setState({
             [key]: null
         });
-        // this.props.onPhotoSubmit(key, null);
+        this.props.onPhoto(key, null);
         document.getElementById(id).value = null;
     }
 
     render() {
         let iconID = `custom-file-playlist-tile${this.props.playlist.index}`;
+        let icon = this.state.icon || this.props.playlist.icon;
+        // take state icon as one render is done.
+        // helps in remove icon functionality.
+        if(!this.state.onceBit) {
+            icon = this.state.icon;
+        }
         return (
             <div>
                 <Form.Row>
                     <Form.Group as={Col} controlId="formPlayList">
                         <Form.Label>Playlist {this.props.count}</Form.Label>
-                        <Form.Control placeholder="Playlist name" required onChange={e => this.props.onData('name', e.target.value, this.props.count)} />
+                        <Form.Control placeholder="Playlist name" value={this.props.playlist.name || 'name here...'} onChange={e => this.props.onData('name', e.target.value, this.props.count)} />
                     </Form.Group>
                     <Form.Group as={Col} controlId="formSourceLink">
                         <Form.Label>Source Link</Form.Label>
-                        <Form.Control placeholder="Portal Source" required onChange={e => this.props.onData('source', e.target.value, this.props.count)} />
+                        <Form.Control placeholder="Portal Source" value={this.props.playlist.source || 'source here...'} onChange={e => this.props.onData('source', e.target.value, this.props.count)} />
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>
-                    <div className="justify-content row pl-3">
+                    <div className="justify-content-between row pl-3">
                         {
-                            this.state.icon ?
+                            icon ?
                             <div className="text-center">
-                                <Image  alt="Tile" src={this.state.icon} height="120" rounded />
+                                <Image  alt="Tile" src={icon} height="120" rounded />
                                 <br />
                                 <input type="button" className="btn btn-danger m-1" value="Remove" onClick={e => this.clearSelection(e, iconID, 'icon')} />
                             </div>
@@ -91,11 +120,14 @@ class PlayList extends React.Component {
                             custom
                             onChange={ e => {
                                 this.updatePhotoState('icon', e.target.files[0], 'iconError', 500*1024, this.props.count);
-                                // this.setState({ iconCrop: true });
                             }}
                         />
                         <Form.Text className="text-muted">
                             Upload Playlist Tile Icon (100px X 100px)
+                            &nbsp;
+                            <i>
+                                jpg, jpeg, png
+                            </i>
                             <br />
                             <strong>(Max size 500KB)</strong>
                             <br />
@@ -103,14 +135,17 @@ class PlayList extends React.Component {
                         </Form.Text>
                     </Form.Group>
                         {
-                            this.state.icon && this.props.playlist.iconCrop ? 
+                            this.state.icon && this.props.playlist.iconCrop && !this.state.updateData ? 
                             <CropModal type="icon" aspect={ 1 } imgSrc={this.state.icon} onClose={this.onModalClose} />
                             :
                             null
                         }
-                    </div>
-                    <div className="my-auto p-2">
-                        <TrashFill color="red" size={30} style={{ cursor: 'pointer' }} onClick={e => this.props.onRemove(this.props.count)} />
+                        <div className="ml-3 my-auto">
+                            <TrashFill color="red" size={30} style={{ cursor: 'pointer' }} onClick={e => {
+                                console.log(this.props.playlist.index);
+                                this.props.onRemove(this.props.count);
+                            }} />
+                        </div>
                     </div>
                 </Form.Row>
             </div>

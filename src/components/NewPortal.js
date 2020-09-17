@@ -11,14 +11,54 @@ class NewPortal extends React.Component {
         super(props);
 
         this.state = {
-            portals: [
-                 
-            ]
+            portals: []
         };
+
+        this.handleSubmitData = this.handleSubmitData.bind(this);
     }
 
     componentDidMount() {
         this.props.fetchPreview();
+    }
+
+    handleSubmitData(data) {
+        let { portalCategory, portalSource, portalTile, portalDescription, playlists, updateData, updateIndex } = data;
+        let portals = this.state.portals;
+        let portal = {
+            portalCategory,
+            portalSource,
+            portalTile,
+            portalDescription,
+            playlists
+        };
+
+        if(!portalSource && !portalTile && playlists.length < 1) {
+            return;
+        }
+        portals.push(portal);
+        this.setState({
+            portals
+        });
+        let portals_data = localStorage.getItem('portals') || null;
+        let portals_js = null;
+        portals_js = JSON.parse(portals_data);
+        console.log(updateData);
+
+        if(updateData) {
+            console.log('update portal', portals_js[updateIndex]);
+            if(portals_js[updateIndex]) {
+                portals_js[updateIndex] = portal;
+                localStorage.setItem('portals', JSON.stringify(portals_js));
+            }
+        } else {
+            if(portals_data) {
+                portals_js.push(portal);
+                localStorage.setItem('portals', JSON.stringify(portals_js));
+            } else {
+                localStorage.setItem('portals', JSON.stringify(this.state.portals));
+            }
+        }
+        // send data to the central from here
     }
 
     render() {
@@ -26,10 +66,10 @@ class NewPortal extends React.Component {
             <div className="row">
                 <div className="col-md-6 col-lg-6" style={{ backgroundColor: 'white' }}>
                     <Header />
-                    <AddPortal />
+                    <AddPortal onSubmitData={this.handleSubmitData} updateData={this.props.location.state || null} />
                 </div>
                 <div className="col-md-6 col-lg-6" style={{ backgroundColor: '#F9FAFC' }}>
-                    <AddPortalPreview />
+                    <AddPortalPreview updateData={this.props.location.state || null} />
                 </div>
             </div>
         );

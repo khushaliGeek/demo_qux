@@ -3,6 +3,7 @@ import '../../css/HomeCss.css';
 import plus_sign from '../../img/plus_sign.png';
 import UpperBarWindow from './UpperBarWindow';
 import { Image } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 
 class PortalPreview extends React.Component {
 
@@ -11,7 +12,8 @@ class PortalPreview extends React.Component {
 
         this.state = {
             portalProfile: null,
-            portalBackground: null
+            portalBackground: null,
+            subportals: null
         };
     }
 
@@ -19,7 +21,55 @@ class PortalPreview extends React.Component {
         return true;
     }
 
+    componentDidMount() {
+        let subportals = this.props.subportals;
+        if(subportals) {
+            this.setState({
+                subportals: subportals
+            });
+        }
+    }
+
+    renderSubPortals() {
+        let subportals_views = [];
+        let subportals_count = 5;
+        if(this.props.subportals) {
+            subportals_count = 5 - this.props.subportals.length;
+        }
+
+        for(let i=0;i<subportals_count;i++) {
+            subportals_views.push(
+                <div className="p-4 m-2 rounded col-2 mx-auto" key={i} style={{ backgroundColor: 'skyblue' }}>
+                    <p className="text-center my-auto">
+                        Portal Type
+                    </p>
+                </div>
+            );
+        }
+        return subportals_views;
+    }
+
+    renderSubPortalLinks() {
+        let subportals_views = [];
+        let subportals_count = 5;
+        if(this.props.subportals) {
+            subportals_count = 5 - this.props.subportals.length;
+        }
+
+        for(let i=0;i<subportals_count;i++) {
+            subportals_views.push(
+                <div className="p-4 m-2 mx-auto" key={i} style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
+                    <Link to="/newPortal" className="text-center">
+                        <img src={plus_sign} height="50" alt="add" />
+                    </Link>
+                </div>
+            );
+        }
+        return subportals_views;
+    }
+
     render() {
+        console.log('preview portal', this.props.subportals);
         let portalProfile = localStorage.getItem('portalProfile') || '';
         let portalBackground = localStorage.getItem('portalBackground') || '';
         // if(portalProfile !== '') {
@@ -43,7 +93,7 @@ class PortalPreview extends React.Component {
                         <div className="row justify-content-between p-4 mt-3">
                             <div className="col-4 align-self-end">
                                 <div className="rounded" style={{ height: 200, width: 200, backgroundColor: 'white' }}>
-                                    <Image src={portalProfile} height="200" width="200" rounded alt="profile" />
+                                    <Image src={portalProfile} height="200" width="200" alt="profile" rounded />
                                 </div>
                             </div>
                             {
@@ -60,35 +110,23 @@ class PortalPreview extends React.Component {
                         </div>
                         {/* portal thumbnails */}
                         <div className="row justify-content-center px-5 portals-type">
-                            <div className="p-4 m-2 rounded col-2 mx-auto" style={{ backgroundColor: 'skyblue' }}>
-                                <p className="text-center my-auto">
-                                    Portal Type
-                                </p>
-                            </div>
                             
-                            <div className="p-4 m-2 rounded col-2 mx-auto" style={{ backgroundColor: 'skyblue' }}>
-                                <p className="text-center my-auto">
-                                    Portal Type
-                                </p>
-                            </div>
+                            {
+                                this.props.subportals ? 
+                                this.props.subportals.map((item, index) => {
+                                    return (
+                                        <div key={index} className="m-2 rounded mx-auto" style={{ backgroundColor: 'skyblue' }}>
+                                            <img src={item.portalTile} style={{ maxHeight: 100, maxWidth: 100 }} alt="tile" className="rounded" />
+                                        </div>
+                                    )
+                                })
+                                :
+                                null
+                                }
 
-                            <div className="p-4 m-2 rounded col-2 mx-auto" style={{ backgroundColor: 'skyblue' }}>
-                                <p className="text-center my-auto">
-                                    Portal Type
-                                </p>
-                            </div>
-
-                            <div className="p-4 m-2 rounded col-2 mx-auto" style={{ backgroundColor: 'skyblue' }}>
-                                <p className="text-center my-auto">
-                                    Portal Type
-                                </p>
-                            </div>
-
-                            <div className="p-4 m-2 rounded col-2 mx-auto" style={{ backgroundColor: 'skyblue' }}>
-                                <p className="text-center my-auto">
-                                    Portal Type
-                                </p>
-                            </div>
+                            {
+                                this.renderSubPortals()
+                            }
                         </div>
                     </div>
                 </div>
@@ -103,31 +141,57 @@ class PortalPreview extends React.Component {
                     </small>
 
                     <div className="row p-2 mx-auto">
-                        <div className="p-4 m-2 mx-auto" style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
-                            <a href="/newPortal" className="text-center">
-                                <img src={plus_sign} height="50" />
-                            </a>
+                        {
+                            this.props.subportals ? 
+                            this.props.subportals.map((item, index) => {
+                                return (
+                                    <div className="m-2 mx-auto" key={index} style={{ backgroundColor: 'white' }}>
+                                        <Link to={
+                                            {
+                                                pathname: '/newPortal',
+                                                state: {
+                                                    item,
+                                                    index
+                                                }
+                                            }
+                                        }>
+                                            <img src={item.portalTile} style={{ maxHeight: 100, maxWidth: 100 }}  alt="add" />
+                                        </Link>
+                                    </div>
+                                )
+                            })
+                            :
+                            null
+                        }
+
+                        {
+                            this.renderSubPortalLinks()
+                        }
+                        {/* <div className="p-4 m-2 mx-auto" style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
+                            <Link to="/newPortal" className="text-center">
+                                <img src={plus_sign} height="50" alt="add" />
+                            </Link>
                         </div>
                         <div className="p-4 m-2 mx-auto" style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
-                            <a href="/newPortal" className="text-center">
-                                <img src={plus_sign} height="50" />
-                            </a>
+                            <Link to="/newPortal" className="text-center">
+                                <img src={plus_sign} height="50" alt="add" />
+                            </Link>
                         </div>
                         <div className="p-4 m-2 mx-auto" style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
-                            <a href="#" className="text-center">
-                                <img src={plus_sign} height="50" />
-                            </a>
+                            <Link to="/newPortal" className="text-center">
+                                <img src={plus_sign} height="50" alt="add" />
+                            </Link>
                         </div>
                         <div className="p-4 m-2 mx-auto" style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
-                            <a href="#" className="text-center">
-                                <img src={plus_sign} height="50" />
-                            </a>
+                            <Link to="/newPortal" className="text-center">
+                                <img src={plus_sign} height="50" alt="add" />
+                            </Link>
                         </div>
                         <div className="p-4 m-2 mx-auto" style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
-                            <a href="#" className="text-center">
-                                <img src={plus_sign} height="50" />
-                            </a>
-                        </div>
+                            <Link to="/newPortal" className="text-center">
+                                <img src={plus_sign} height="50" alt="add" />
+                            </Link>
+                        </div> */}
                     </div>
                 </div>
             </div>

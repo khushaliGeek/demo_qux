@@ -97,7 +97,7 @@ class CropModal extends React.Component {
 
                 window.URL.revokeObjectURL(this.fileUrl);
                 this.fileUrl = window.URL.createObjectURL(blob);
-                console.log(this.fileUrl);
+                console.log(this.props.type, this.fileUrl);
                 resolve(this.fileUrl);
               }, 'image/jpeg');
             });

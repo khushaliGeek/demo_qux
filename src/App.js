@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import './App.css';
 import Home from './components/Home';
 import Login from './components/Login';
@@ -19,6 +19,9 @@ class App extends React.Component {
 
   componentDidMount() {
     this.props.fetchUser();
+    localStorage.removeItem('portals');
+    localStorage.removeItem('portalProfile');
+    localStorage.removeItem('portalBackground');
   }
 
   renderContent() {

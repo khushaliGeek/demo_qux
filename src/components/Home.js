@@ -16,8 +16,19 @@ class Home extends React.Component {
             portalProfile: null,
             portalBackground: null,
             authorName: null,
-            authorProfile: null
+            authorProfile: null,
+            subportals: null
         };
+    }
+
+    componentDidMount() {
+        let portals = localStorage.getItem('portals') || null;
+        if(portals) {
+            this.setState({
+                subportals: JSON.parse(portals)
+            });
+        }
+        
     }
 
     handleSubmitData(data) {
@@ -41,14 +52,15 @@ class Home extends React.Component {
     }
 
     render() {
+        console.log('Home component', this.state.subportals);
         return (
             <div className="row">
                 <div className="col-md-6 col-lg-6" style={{ backgroundColor: 'white' }}>
                     <Header />
-                    <PortalGenerator onFormSubmit={this.handleSubmitData.bind(this)} onPhotoSubmit={this.handlePhotoData.bind(this)} />
+                    <PortalGenerator onFormSubmit={this.handleSubmitData.bind(this)} onPhotoSubmit={this.handlePhotoData.bind(this)}/>
                 </div>
                 <div className="col-md-6 col-lg-6" style={{ backgroundColor: '#F9FAFC' }}>
-                    <PortalPreview portalProfile={this.state.portalProfile || null} portalBackground={this.state.portalBackground || null} />
+                    <PortalPreview portalProfile={this.state.portalProfile || null} portalBackground={this.state.portalBackground || null} subportals={this.state.subportals || null} />
                 </div>
             </div>
         );

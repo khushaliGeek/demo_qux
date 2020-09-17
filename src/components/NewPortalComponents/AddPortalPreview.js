@@ -8,8 +8,21 @@ class AddPortalPreview extends React.Component {
         super(props);
 
         this.state = {
-
+            playlists: []
         };
+    }
+
+    componentDidMount() {
+        if(this.props.updateData) {
+            let { playlists } = this.props.updateData.item;
+            this.setState({
+                playlists
+            });
+
+            console.log('playlists preview', playlists);
+        }
+
+        
     }
 
     shouldComponentUpdate() {
@@ -40,7 +53,7 @@ class AddPortalPreview extends React.Component {
                             <div className="col-6">
                                 <div className="row m-1 rounded" style={{ height: 50, width: 150, backgroundColor: 'skyblue' }}>
                                     <div className="rounded my-auto ml-1" style={{ height: 40, width: 40, backgroundColor: 'white' }}>
-                                        <Image src={portalProfile} height="40" width="40" rounded alt="icon" />
+                                        <Image src={''} height="40" width="40" rounded alt="icon" />
                                     </div>
                                     <div className="col-8">
                                         <small>
@@ -53,7 +66,7 @@ class AddPortalPreview extends React.Component {
 
                                 <div className="row m-1 rounded" style={{ height: 50, width: 150, backgroundColor: 'skyblue' }}>
                                     <div className="rounded my-auto ml-1" style={{ height: 40, width: 40, backgroundColor: 'white' }}>
-                                        <Image src={portalProfile} height="40" width="40" rounded alt="icon" />
+                                        <Image src={''} height="40" width="40" rounded alt="icon" />
                                     </div>
                                     <div className="col-8">
                                         <small>
@@ -66,7 +79,7 @@ class AddPortalPreview extends React.Component {
 
                                 <div className="row m-1 rounded" style={{ height: 50, width: 150, backgroundColor: 'skyblue' }}>
                                     <div className="rounded my-auto ml-1" style={{ height: 40, width: 40, backgroundColor: 'white' }}>
-                                        <Image src={portalProfile} height="40" width="40" rounded alt="icon" />
+                                        <Image src={''} height="40" width="40" rounded alt="icon" />
                                     </div>
                                     <div className="col-8">
                                         <small>

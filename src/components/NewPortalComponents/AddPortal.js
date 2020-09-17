@@ -3,6 +3,7 @@ import { ChevronLeft, PlusCircleFill } from 'react-bootstrap-icons';
 import { Form, Col, Image } from 'react-bootstrap';
 import CropModal from '../HomeComponents/CropModal';
 import PlayList from './PlayList';
+import { Link } from 'react-router-dom';
 
 class AddPortal extends React.Component {
 
@@ -10,23 +11,33 @@ class AddPortal extends React.Component {
         super(props);
 
         this.state = {
-            portalType: null,
-            portalSource: null,
+            portalCategory: null,
+            portalSource: 'source here...',
+            portalDescription: 'description here...',
             portalTile: null,
             portalTileCrop: false,
             tileError: null,
-            playlists: [
-                {
-                    name: null,
-                    source: null,
-                    icon: null,
-                    index: 1,
-                    iconError: null,
-                    iconCrop: false
-                }
-            ],
-            playlistsCount: 1
+            playlists: [],
+            playlistsCount: 1,
+            updateData: false,
+            updateIndex: null
         };
+    }
+    
+    componentDidMount() {
+        if(this.props.updateData) {
+            let { portalSource, portalDescription, portalTile, portalCategory, playlists } = this.props.updateData.item;
+            this.setState({
+                portalSource,
+                portalDescription,
+                portalTile,
+                portalCategory,
+                playlists,
+                playlistsCount: playlists.length || 1,
+                updateData: true,
+                updateIndex: this.props.updateData.index
+            });
+        }
     }
 
     updatePhotoState(key, value, errorKey, photoSize) {   
@@ -49,8 +60,6 @@ class AddPortal extends React.Component {
               [key]: reader.result,
           });
         }.bind(this);
-      console.log(value);
-    //   this.props.onPhotoSubmit(key, value);
     }
 
     handleSubmit(e) {
@@ -63,6 +72,20 @@ class AddPortal extends React.Component {
         });
     }
 
+    updateCategoryState(key, e) {
+        let options = e.target.options;
+        let val = [];
+        for (let i = 0, l = options.length; i < l; i++) {
+          if (options[i].selected) {
+            val.push(options[i].value);
+          }
+        }
+
+        this.setState({
+            [key]: val
+        });
+      }
+
     onModalClose = (data) => {
 
         let crop = '';
@@ -70,10 +93,9 @@ class AddPortal extends React.Component {
 
         if(data.type === "tile")
         {
-             key = 'portalTile';
+            key = 'portalTile';
             crop = 'portalTileCrop';
         }
-        // this.props.onPhotoSubmit(key, data.image);
           this.setState({
             [crop]: false,
             [key]: data.image,
@@ -85,7 +107,6 @@ class AddPortal extends React.Component {
         this.setState({
             [key]: null
         });
-        // this.props.onPhotoSubmit(key, null);
         document.getElementById(id).value = null;
     }
 
@@ -93,7 +114,11 @@ class AddPortal extends React.Component {
         let data = this.state.playlists;
         let playlistViews = [];
         for(let i=1; i<=this.state.playlistsCount; i++) {
-            let playlist = null;            
+            let playlist = null;   
+                     
+            if(data[i-1] === 'deleted') {
+                continue;
+            }
             if(!data[i-1]) {
                 playlist = {
                     name: null,
@@ -101,19 +126,19 @@ class AddPortal extends React.Component {
                     icon: null,
                     index: i,
                     iconError: null,
-                    iconCrop: false
+                    iconCrop: false,
                 };
                 data.push(playlist);
             } else {
                 playlist = data[i-1];
             }
-            
             playlistViews.push(
                 <PlayList 
                     onAddNew={this.addPlayListData.bind(this)} 
-                    playlist={playlist} 
+                    playlist={playlist}
                     key={i} 
                     count={i}
+                    updateData={this.state.updateData}
                     onRemove={this.removePlayList.bind(this)}
                     onPhoto={this.addPlaylistIcon.bind(this)}
                     onData={this.addPlayListData.bind(this)}
@@ -125,14 +150,13 @@ class AddPortal extends React.Component {
 
     removePlayList(index) {
         let data = this.state.playlists;
-        data = data.splice(index-1, 1);
-
+        data[index-1] = 'deleted';
+        // data = data.splice(index-1, 1);
+        
         this.setState({
             playlists: data,
-            playlistsCount: this.state.playlistsCount - 1
+            playlistsCount: this.state.playlistsCount
         });
-
-        console.log('after deleted', this.state.playlists);
     }
 
     addPlaylist() {
@@ -180,22 +204,24 @@ class AddPortal extends React.Component {
         return (
             <div className="container">
                 <div>
-                    <a href="/"><ChevronLeft color="black" size={18} /></a>
+                    <Link to="/"><ChevronLeft color="black" size={18} /></Link>
                     &nbsp;
                     <strong>Add Portals</strong>
                 </div>
                 <Form className="p-2" onSubmit={e => this.handleSubmit(e)}>
                     <Form.Row>
                         <Form.Group as={Col} controlId="formPortalType">
-                            <Form.Label>Portal Type</Form.Label>
-                            <Form.Control as="select" defaultValue="Choose..." required onChange={e => this.updateState('portalType', e.target.value)}>
-                                <option value="">Select one</option>
-                                <option>...</option>
+                            <Form.Label>Portal Category</Form.Label>
+                            <Form.Control as="select" multiple={true} defaultValue={this.state.portalCategory} onChange={e => this.updateCategoryState('portalCategory', e)}>
+                                <option value="A" selected={this.state.portalCategory ? this.state.portalCategory.includes('A') : false}>A</option>
+                                <option value="B" selected={this.state.portalCategory ? this.state.portalCategory.includes('B') : false}>B</option>
+                                <option value="C" selected={this.state.portalCategory ? this.state.portalCategory.includes('C') : false}>C</option>
+                                <option value="D" selected={this.state.portalCategory ? this.state.portalCategory.includes('D') : false}>D</option>
                             </Form.Control>
                         </Form.Group>
                         <Form.Group as={Col} controlId="formPortalSource">
                             <Form.Label>Portal Source</Form.Label>
-                            <Form.Control placeholder="Portal Source" required onChange={e => this.updateState('portalSource', e.target.value)} />
+                            <Form.Control placeholder="Portal Source" as="textarea" value={this.state.portalSource} required onChange={e => this.updateState('portalSource', e.target.value)} />
                         </Form.Group>
                     </Form.Row>
                     <div className="justify-content row pl-3">
@@ -223,6 +249,10 @@ class AddPortal extends React.Component {
                             />
                             <Form.Text className="text-muted">
                                 Upload Portal Tile Icon (100px X 100px)
+                                &nbsp;
+                                <i>
+                                    jpg, jpeg, png
+                                </i>
                                 <br />
                                 <strong>(Max size 500KB)</strong>
                                 <br />
@@ -236,6 +266,14 @@ class AddPortal extends React.Component {
                             null
                         }
                     </div>
+                    <Form.Group as={Col} controlId="formDescription">
+                        <Form.Label>Description</Form.Label>
+                        <Form.Control as="textarea" maxLength={200} value={this.state.portalDescription} required onChange={e => this.updateState('portalDescription', e.target.value)}>
+                        </Form.Control>
+                        <Form.Text className="text-muted">
+                            (Max 200 characters)
+                        </Form.Text>
+                    </Form.Group> 
                     <div className="pt-2">
                         <strong>
                             Playlists
@@ -251,7 +289,7 @@ class AddPortal extends React.Component {
                     </div>
                     <div className="p-2 row justify-content-center w-100">
                         <button type="submit" className="btn btn-primary m-1 p-2 px-5" style={{ backgroundColor: '#6193C4' }}><b>SAVE AND BACK TO HOME</b></button>
-                        <button type="submit" className="btn btn-success m-1 p-2 px-5"><b>SAVE AND CONTINUE</b></button>
+                        <button type="submit" className="btn btn-success m-1 p-2 px-5" onClick={e => this.props.onSubmitData(this.state)}><b>SAVE AND CONTINUE</b></button>
                     </div>
                 </Form>
             </div>

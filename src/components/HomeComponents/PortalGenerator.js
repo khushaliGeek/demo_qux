@@ -12,7 +12,7 @@ class PortalGenerator extends React.Component {
             portalName: null,
             portalCategory: null,
             portalExplict: null,
-            portalDesktop: null,
+            portalDescription: null,
             portalProfile: null,
             portalBackground: null,
             authorName: null,
@@ -52,11 +52,24 @@ class PortalGenerator extends React.Component {
       }
 
       updateState(key, value) {
-          
           this.setState({
               [key]: value
           });
 
+      }
+
+      updateCategoryState(key, e) {
+        let options = e.target.options;
+        let val = [];
+        for (let i = 0, l = options.length; i < l; i++) {
+          if (options[i].selected) {
+            val.push(options[i].value);
+          }
+        }
+
+        this.setState({
+            [key]: val
+        });
       }
 
       updatePhotoState(key, value, errorKey, photoSize) {   
@@ -162,9 +175,9 @@ class PortalGenerator extends React.Component {
                             <Form.Label>Portal Name</Form.Label>
                             <Form.Control placeholder="Portal Name" required onChange={e => this.updateState('portalName', e.target.value)} />
                         </Form.Group>
-                        <Form.Group as={Col} controlId="formCategory">
-                            <Form.Label>Category</Form.Label>
-                            <Form.Control as="select" defaultValue="Choose..." required onChange={e => this.updateState('portalCategory', e.target.value)}>
+                        <Form.Group as={Col} controlId="formExplict">
+                            <Form.Label>Select Explict</Form.Label>
+                            <Form.Control as="select" defaultValue="Choose..." onChange={e => this.updateState('portalExplict', e.target.value)}>
                                 <option value="">Select one</option>
                                 <option>...</option>
                             </Form.Control>
@@ -172,20 +185,22 @@ class PortalGenerator extends React.Component {
                         
                     </Form.Row>
                     <Form.Row>
-                        <Form.Group as={Col} controlId="formExplict">
-                            <Form.Label>Select Explict</Form.Label>
-                            <Form.Control as="select" defaultValue="Choose..." required onChange={e => this.updateState('portalExplict', e.target.value)}>
-                                <option value="">Select one</option>
-                                <option>...</option>
+                        <Form.Group as={Col} controlId="formCategory">
+                            <Form.Label>Category</Form.Label>
+                            <Form.Control as="select" ref="portalCategory" multiple={true} onChange={e => this.updateCategoryState('portalCategory', e)}>
+                                <option>Video</option>
+                                <option>Podcast</option>
+                                <option>Live</option>
                             </Form.Control>
                         </Form.Group>
-                        <Form.Group as={Col} controlId="formDesktop">
-                            <Form.Label>Portal Desktop</Form.Label>
-                            <Form.Control as="select" defaultValue="Choose..." required onChange={e => this.updateState('portalDesktop', e.target.value)}>
-                                <option value="">Select one</option>
-                                <option value="yes">Yes</option>
-                                <option value="no">No</option>
+                        
+                        <Form.Group as={Col} controlId="formDescription">
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control as="textarea" maxLength={200} required onChange={e => this.updateState('portalDescription', e.target.value)}>
                             </Form.Control>
+                            <Form.Text className="text-muted">
+                                (Max 200 characters)
+                            </Form.Text>
                         </Form.Group> 
                     </Form.Row>
                     {/* profile image for portal */}
@@ -213,7 +228,11 @@ class PortalGenerator extends React.Component {
                                 } }
                             />
                             <Form.Text className="text-muted">
-                                Upload Portal Profile Image (1000px X 1000px)
+                                Upload Portal Profile Image (1000px X 1000px) 
+                                &nbsp;
+                                <i>
+                                    jpg, jpeg, png
+                                </i>
                                 <br />
                                 <strong>(Max size 500KB)</strong>
                                 <br />
@@ -254,6 +273,10 @@ class PortalGenerator extends React.Component {
                             />
                             <Form.Text className="text-muted">
                                 Upload background Image (1920px X 1080px)
+                                &nbsp;
+                                <i>
+                                    jpg, jpeg, png
+                                </i>
                                 <br />
                                 <strong>(Max size 1MB)</strong>
                                 <br />
@@ -301,6 +324,10 @@ class PortalGenerator extends React.Component {
                             />
                             <Form.Text className="text-muted">
                                 Upload Author Profile Image (500px X 500px)
+                                &nbsp;
+                                <i>
+                                    jpg, jpeg, png
+                                </i>
                                 <br />
                                 <strong>(Max size 500KB)</strong>
                                 <br />
