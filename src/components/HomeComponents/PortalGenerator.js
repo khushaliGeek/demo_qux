@@ -1,6 +1,8 @@
 import React from 'react';
 import { Form, Col, Image } from 'react-bootstrap';
 import CropModal from './CropModal';
+import * as actions from '../../actions';
+import { connect } from 'react-redux';
 
 class PortalGenerator extends React.Component {
 
@@ -55,11 +57,49 @@ class PortalGenerator extends React.Component {
           this.setState({
               [key]: value
           });
+      }
 
+      componentDidMount() {
+        this.props.fetchMainCategories();
+        let portalProfile = localStorage.getItem('portalProfile') || '';
+        let portalBackground = localStorage.getItem('portalBackground') || '';
+        let authorProfile = localStorage.getItem('authorProfile') || '';
+        let mainPortal = localStorage.getItem('mainPortal') || null;
+        if(portalProfile !== '') {
+            this.setState({
+                portalProfile,
+            });
+        }
+        if(portalBackground !== '') {
+            this.setState({
+                portalBackground
+            });
+        }
+        if(authorProfile !== '') {
+            this.setState({
+                authorProfile
+            });
+        }
+
+        if(mainPortal) {
+            let data = JSON.parse(mainPortal);
+            let { portalName, portalCategory, portalDescription, authorName, portalExplict } = data;
+            this.setState({
+                portalName,
+                portalCategory,
+                portalDescription,
+                portalExplict,
+                authorName
+            });
+        }
       }
 
       componentWillUnmount() {
         this.props.onFormSubmit(this.state, false);
+      }
+
+      shouldComponentUpdate() {
+          return true;
       }
 
       updateCategoryState(key, e) {
@@ -150,23 +190,8 @@ class PortalGenerator extends React.Component {
           document.getElementById(id).value = null;
       }
 
-      componentDidMount() {
-        let portalProfile = localStorage.getItem('portalProfile') || '';
-        let portalBackground = localStorage.getItem('portalBackground') || '';
-        if(portalProfile !== '') {
-            this.setState({
-                portalProfile,
-            });
-        }
-        if(portalBackground !== '') {
-            this.setState({
-                portalBackground
-            });
-        }
-      }
-
     render() {
-        
+        console.table('mainCategories', this.props.mainCategories);
         return (
             <div className="p-2">
                 <strong>
@@ -177,13 +202,15 @@ class PortalGenerator extends React.Component {
                     <Form.Row>
                         <Form.Group as={Col} controlId="formPortalName">
                             <Form.Label>Portal Name</Form.Label>
-                            <Form.Control placeholder="Portal Name" required onChange={e => this.updateState('portalName', e.target.value)} />
+                            <Form.Control placeholder="Portal Name" value={this.state.portalName || null} required onChange={e => this.updateState('portalName', e.target.value)} />
                         </Form.Group>
                         <Form.Group as={Col} controlId="formExplict">
                             <Form.Label>Select Explict</Form.Label>
-                            <Form.Control as="select" defaultValue="Choose..." onChange={e => this.updateState('portalExplict', e.target.value)}>
+                            <Form.Control as="select" defaultValue={this.state.portalExplict || 'Choose..'} onChange={e => this.updateState('portalExplict', e.target.value)}>
                                 <option value="">Select one</option>
-                                <option>...</option>
+                                <option value="Exp 1" selected={this.state.portalExplict === "Exp 1"}>Exp 1</option>
+                                <option value="Exp 2" selected={this.state.portalExplict === "Exp 2"}>Exp 2</option>
+                                <option value="Exp 3" selected={this.state.portalExplict === "Exp 3"}>Exp 3</option>
                             </Form.Control>
                         </Form.Group>
                         
@@ -191,16 +218,16 @@ class PortalGenerator extends React.Component {
                     <Form.Row>
                         <Form.Group as={Col} controlId="formCategory">
                             <Form.Label>Category</Form.Label>
-                            <Form.Control as="select" ref="portalCategory" multiple={true} onChange={e => this.updateCategoryState('portalCategory', e)}>
-                                <option>Video</option>
-                                <option>Podcast</option>
-                                <option>Live</option>
+                            <Form.Control as="select" ref="portalCategory" defaultValue={this.state.portalCategory} multiple={true} onChange={e => this.updateCategoryState('portalCategory', e)}>
+                                <option value="Video" selected={this.state.portalCategory ? this.state.portalCategory.includes("Video") || false : false}>Video</option>
+                                <option value="Podcast" selected={this.state.portalCategory ? this.state.portalCategory.includes("Podcast") || false : false}>Podcast</option>
+                                <option value="Live" selected={this.state.portalCategory ? this.state.portalCategory.includes("Live") || false : false}>Live</option>
                             </Form.Control>
                         </Form.Group>
                         
                         <Form.Group as={Col} controlId="formDescription">
                             <Form.Label>Description</Form.Label>
-                            <Form.Control as="textarea" maxLength={200} required onChange={e => this.updateState('portalDescription', e.target.value)}>
+                            <Form.Control as="textarea" maxLength={200} value={this.state.portalDescription} required onChange={e => this.updateState('portalDescription', e.target.value)}>
                             </Form.Control>
                             <Form.Text className="text-muted">
                                 (Max 200 characters)
@@ -300,7 +327,7 @@ class PortalGenerator extends React.Component {
                     {/* <br /> */}
                     <Form.Group as={Col} controlId="formAuthorName">
                         <Form.Label>Author Name</Form.Label>
-                        <Form.Control placeholder="Author Name" onChange={e => this.updateState('authorName', e.target.value)} />
+                        <Form.Control placeholder="Author Name" value={this.state.authorName || ''} onChange={e => this.updateState('authorName', e.target.value)} />
                     </Form.Group>
                     {/* author profile image */}
                     <div className="justify-content row pl-3">
@@ -355,4 +382,10 @@ class PortalGenerator extends React.Component {
     }
 }
 
-export default PortalGenerator;
+function mapStateToProps({ mainCategories }) {
+    return {
+        mainCategories
+    };
+}
+
+export default connect(mapStateToProps, actions)(PortalGenerator);

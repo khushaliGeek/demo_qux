@@ -13,16 +13,68 @@ class AddPortalPreview extends React.Component {
     }
 
     componentDidMount() {
+        // setting the playlists values into the state that are coming for the update
         if(this.props.updateData) {
             let { playlists } = this.props.updateData.item;
             this.setState({
                 playlists
             });
-
-            console.log('playlists preview', playlists);
         }
+    }
 
-        
+    renderPlaylists() {
+        // playlists those are already created and needed to update only.
+        let iterator_count = this.state.playlists.length;
+        if(iterator_count > 3) {
+            iterator_count = 3;
+        }
+        let data = this.state.playlists;
+        let playlists = [];
+        for(let i=0;i<iterator_count;i++) {
+            playlists.push(
+                <div className="row m-1 rounded" key={i} style={{ height: 50, width: 150, backgroundColor: 'skyblue' }}>
+                    <div className="rounded my-auto ml-1" style={{ height: 40, width: 40, backgroundColor: 'white' }}>
+                        <Image src={data[i].icon} height="40" width="40" rounded alt="icon" />
+                    </div>
+                    <div className="mx-auto">
+                        <small>
+                            <b>{data[i].name}</b>
+                        </small>
+                        <br />
+                        <small>{data[i].source}</small> 
+                    </div>
+                </div>
+            );
+        }
+        return playlists;
+    }
+
+    renderBlankPlaylists() {
+        // blank playlists creation
+        let iterator_count = 0;
+        if(this.state.playlists.length < 3) {
+            iterator_count = 3 - this.state.playlists.length;
+        }
+        let playlists = [];
+        if(iterator_count) {
+            for(let i=0; i<iterator_count;i++) {
+                playlists.push(
+                    <div className="row m-1 rounded" key={`play${i}`} style={{ height: 50, width: 150, backgroundColor: 'skyblue' }}>
+                        <div className="rounded my-auto ml-1" style={{ height: 40, width: 40, backgroundColor: 'white' }}>
+                            {/* <Image src={''} height="40" width="40" rounded alt="icon" /> */}
+                        </div>
+                        <div className="col-8">
+                            <small>
+                                <b>Name</b>
+                            </small>
+                            <br />
+                            <small>Source</small> 
+                        </div>
+                    </div>
+                );
+            }
+            return playlists;
+        }
     }
 
     shouldComponentUpdate() {
@@ -51,44 +103,15 @@ class AddPortalPreview extends React.Component {
                                 Background image will be 
                             </div>
                             <div className="col-6">
-                                <div className="row m-1 rounded" style={{ height: 50, width: 150, backgroundColor: 'skyblue' }}>
-                                    <div className="rounded my-auto ml-1" style={{ height: 40, width: 40, backgroundColor: 'white' }}>
-                                        <Image src={''} height="40" width="40" rounded alt="icon" />
-                                    </div>
-                                    <div className="col-8">
-                                        <small>
-                                            <b>Tile 1</b>
-                                        </small>
-                                        <br />
-                                        <small>EPP 1</small> 
-                                    </div>
-                                </div>
-
-                                <div className="row m-1 rounded" style={{ height: 50, width: 150, backgroundColor: 'skyblue' }}>
-                                    <div className="rounded my-auto ml-1" style={{ height: 40, width: 40, backgroundColor: 'white' }}>
-                                        <Image src={''} height="40" width="40" rounded alt="icon" />
-                                    </div>
-                                    <div className="col-8">
-                                        <small>
-                                            <b>Tile 2</b>
-                                        </small>
-                                        <br />
-                                        <small>EPP 2</small> 
-                                    </div>
-                                </div>
-
-                                <div className="row m-1 rounded" style={{ height: 50, width: 150, backgroundColor: 'skyblue' }}>
-                                    <div className="rounded my-auto ml-1" style={{ height: 40, width: 40, backgroundColor: 'white' }}>
-                                        <Image src={''} height="40" width="40" rounded alt="icon" />
-                                    </div>
-                                    <div className="col-8">
-                                        <small>
-                                            <b>Tile 3</b>
-                                        </small>
-                                        <br />
-                                        <small>EPP 3</small> 
-                                    </div>
-                                </div>
+                                {
+                                    this.props.updateData ? 
+                                    this.renderPlaylists()
+                                    :
+                                    null
+                                }
+                                {
+                                    this.renderBlankPlaylists()
+                                }
                             </div>
                         </div>
                     </div>

@@ -19,7 +19,7 @@ class Login extends React.Component {
 
     onLoginClick(e) {
         e.preventDefault();
-        this.props.loginUser(this.state.username);
+        this.props.loginUser(this.state);
     }
 
     updateState(key, value) {

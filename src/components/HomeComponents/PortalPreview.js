@@ -4,6 +4,7 @@ import plus_sign from '../../img/plus_sign.png';
 import UpperBarWindow from './UpperBarWindow';
 import { Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
 
 class PortalPreview extends React.Component {
 
@@ -58,10 +59,18 @@ class PortalPreview extends React.Component {
 
         for(let i=0;i<subportals_count;i++) {
             subportals_views.push(
-                <div className="p-4 m-2 mx-auto" key={i} style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
+                <div className="p-4 m-2 mx-auto" key={i} data-tip data-for="addTip" style={{ backgroundColor: 'white', border: 1, borderStyle: 'dashed', borderColor: 'skyblue' }}>
                     <Link to="/newPortal" className="text-center">
                         <img src={plus_sign} height="50" alt="add" />
                     </Link>
+
+                    <ReactTooltip
+                        id="addTip"
+                        place="bottom"
+                        effect="solid"
+                    >
+                        Add Portal
+                    </ReactTooltip>
                 </div>
             );
         }
@@ -115,7 +124,7 @@ class PortalPreview extends React.Component {
                                 this.props.subportals ? 
                                 this.props.subportals.map((item, index) => {
                                     return (
-                                        <div key={index} className="m-2 rounded mx-auto" style={{ backgroundColor: 'skyblue' }}>
+                                        <div key={index}  className="m-2 rounded mx-auto" style={{ backgroundColor: 'skyblue' }}>
                                             <img src={item.portalTile} style={{ maxHeight: 100, maxWidth: 100 }} alt="tile" className="rounded" />
                                         </div>
                                     )
@@ -146,6 +155,13 @@ class PortalPreview extends React.Component {
                             this.props.subportals.map((item, index) => {
                                 return (
                                     <div className="m-2 mx-auto" key={index} style={{ backgroundColor: 'white' }}>
+                                        <ReactTooltip
+                                                id="updateTip"
+                                                place="bottom"
+                                                effect="solid"
+                                            >
+                                                Update Portal
+                                            </ReactTooltip>
                                         <Link to={
                                             {
                                                 pathname: '/newPortal',
@@ -154,7 +170,9 @@ class PortalPreview extends React.Component {
                                                     index
                                                 }
                                             }
-                                        }>
+                                        } 
+                                        data-tip data-for="updateTip"
+                                        >
                                             <img src={item.portalTile} style={{ maxHeight: 100, maxWidth: 100 }}  alt="add" />
                                         </Link>
                                     </div>

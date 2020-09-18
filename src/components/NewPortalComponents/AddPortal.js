@@ -4,6 +4,7 @@ import { Form, Col, Image } from 'react-bootstrap';
 import CropModal from '../HomeComponents/CropModal';
 import PlayList from './PlayList';
 import { Link, Redirect } from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
 
 class AddPortal extends React.Component {
 
@@ -12,8 +13,8 @@ class AddPortal extends React.Component {
 
         this.state = {
             portalCategory: null,
-            portalSource: 'source here...',
-            portalDescription: 'description here...',
+            portalSource: '',
+            portalDescription: '',
             portalTile: null,
             portalTileCrop: false,
             tileError: null,
@@ -202,17 +203,22 @@ class AddPortal extends React.Component {
     }
 
     saveData(flag) {
-        this.props.onSubmitData(this.state);
-
-        if(!flag) {
+        if(this.state.portalCategory && this.state.portalSource) {
             this.setState({
-                redirectFlag: true
+                updateData: true
             });
+            this.props.onSubmitData(this.state);
+
+            if(!flag) {
+                this.setState({
+                    redirectFlag: true
+                });
+            }
         }
+        
     }
 
     renderRedirect() {
-        console.log('renderFlag', this.state.redirectFlag);
         if(this.state.redirectFlag) {
             return <Redirect to="/" />
         }
@@ -222,7 +228,14 @@ class AddPortal extends React.Component {
         return (
             <div className="container">
                 <div>
-                    <Link to="/"><ChevronLeft color="black" size={18} /></Link>
+                    <ReactTooltip
+                        id="goBackTip"
+                        place="right"
+                        effect="solid"
+                    >
+                        Go back
+                    </ReactTooltip>
+                    <Link to="/" data-tip data-for="goBackTip"><ChevronLeft color="black" size={18} /></Link>
                     &nbsp;
                     <strong>Add Portals</strong>
                 </div>
@@ -230,7 +243,7 @@ class AddPortal extends React.Component {
                     <Form.Row>
                         <Form.Group as={Col} controlId="formPortalType">
                             <Form.Label>Portal Category</Form.Label>
-                            <Form.Control as="select" multiple={true} defaultValue={this.state.portalCategory} onChange={e => this.updateCategoryState('portalCategory', e)}>
+                            <Form.Control as="select" required multiple={true} defaultValue={this.state.portalCategory} onChange={e => this.updateCategoryState('portalCategory', e)}>
                                 <option value="A" selected={this.state.portalCategory ? this.state.portalCategory.includes('A') : false}>A</option>
                                 <option value="B" selected={this.state.portalCategory ? this.state.portalCategory.includes('B') : false}>B</option>
                                 <option value="C" selected={this.state.portalCategory ? this.state.portalCategory.includes('C') : false}>C</option>
@@ -239,7 +252,7 @@ class AddPortal extends React.Component {
                         </Form.Group>
                         <Form.Group as={Col} controlId="formPortalSource">
                             <Form.Label>Portal Source</Form.Label>
-                            <Form.Control placeholder="Portal Source" as="textarea" value={this.state.portalSource} required onChange={e => this.updateState('portalSource', e.target.value)} />
+                            <Form.Control placeholder="Portal Source" required as="textarea" value={this.state.portalSource} required onChange={e => this.updateState('portalSource', e.target.value)} />
                         </Form.Group>
                     </Form.Row>
                     <div className="justify-content row pl-3">
@@ -302,7 +315,14 @@ class AddPortal extends React.Component {
                             }
                         </div>
                         <div className="float-right m-2">
-                            <PlusCircleFill color="blue" data-toggle="tooltip" data-placement="right" title="Add Playlist" size={30} style={{ cursor: 'pointer' }} onClick={ e => this.addPlaylist()} />
+                            <ReactTooltip
+                                id="addPlaylistTip"
+                                place="right"
+                                effect="solid"
+                            >
+                                Add playlist from here
+                            </ReactTooltip>
+                            <PlusCircleFill color="blue" data-tip data-for="addPlaylistTip" data-placement="right" title="Add Playlist" size={30} style={{ cursor: 'pointer' }} onClick={ e => this.addPlaylist()} />
                         </div>
                     </div>
                     <div className="p-2 row justify-content-center w-100">

@@ -12,6 +12,7 @@ class Home extends React.Component {
             portalName: null,
             portalCategory: null,
             portalExplict: null,
+            portalDescription: null,
             portalDesktop: null,
             portalProfile: null,
             portalBackground: null,
@@ -32,27 +33,41 @@ class Home extends React.Component {
 
         if(mainPortal) {
             let data = JSON.parse(mainPortal);
-            
+            let { portalName, portalCategory, portalExplict, authorName, portalDescription } = data;
+            this.setState({
+                portalName,
+                portalCategory,
+                portalExplict,
+                authorName,
+                portalDescription
+            });
         }
-        
     }
 
     handleSubmitData(data, flag) {
+        let { portalName, portalCategory, portalExplict, authorName, authorProfile, portalDescription, portalProfile, portalBackground, portalDesktop } = data;
         this.setState({
-            portalName: data.portalName,
-            portalCategory: data.portalCategory,
-            portalExplict: data.portalExplict,
-            portalDesktop: data.portalDesktop,
-            portalProfile: data.portalProfile,
-            portalBackground: data.portalBackground,
-            authorName: data.authorName,
-            authorProfile: data.authorProfile
+            portalName,
+            portalCategory,
+            portalExplict,
+            portalDesktop,
+            portalProfile,
+            portalBackground,
+            authorName,
+            authorProfile,
+            portalDescription
         });
-        localStorage.setItem('mainPortal', JSON.stringify(data));
+        localStorage.setItem('mainPortal', JSON.stringify({
+            portalName,
+            portalCategory,
+            portalExplict,
+            authorName,
+            portalDescription
+        }));
 
         // save api call only if flag is true
         if(flag) {
-            
+
         }
     }
 
@@ -64,12 +79,11 @@ class Home extends React.Component {
     }
 
     render() {
-        console.log('Home component', this.state.subportals);
         return (
             <div className="row">
                 <div className="col-md-6 col-lg-6" style={{ backgroundColor: 'white' }}>
                     <Header />
-                    <PortalGenerator onFormSubmit={this.handleSubmitData.bind(this)} onPhotoSubmit={this.handlePhotoData.bind(this)}/>
+                    <PortalGenerator onFormSubmit={this.handleSubmitData.bind(this)} onPhotoSubmit={this.handlePhotoData.bind(this)} />
                 </div>
                 <div className="col-md-6 col-lg-6" style={{ backgroundColor: '#F9FAFC' }}>
                     <PortalPreview portalProfile={this.state.portalProfile || null} portalBackground={this.state.portalBackground || null} subportals={this.state.subportals || null} />

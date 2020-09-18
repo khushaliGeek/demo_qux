@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Col, Image } from 'react-bootstrap';
 import { TrashFill } from 'react-bootstrap-icons';
 import CropModal from '../HomeComponents/CropModal';
+import ReactTooltip from 'react-tooltip';
 
 class PlayList extends React.Component {
 
@@ -137,10 +138,19 @@ class PlayList extends React.Component {
                             null
                         }
                         <div className="ml-3 my-auto">
+                            <ReactTooltip
+                                id="removePlaylistTip"
+                                place="right"
+                                effect="solid"
+                            >
+                                Remove playlist {this.props.count}
+                            </ReactTooltip>
                             <TrashFill color="red" size={30} style={{ cursor: 'pointer' }} onClick={e => {
                                 console.log(this.props.playlist.index);
                                 this.props.onRemove(this.props.count);
-                            }} />
+                            }} 
+                            data-tip data-for="removePlaylistTip"
+                            />
                         </div>
                     </div>
                 </Form.Row>

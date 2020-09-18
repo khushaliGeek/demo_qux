@@ -58,6 +58,8 @@ class CropModal extends React.Component {
 
         async makeClientCrop(crop) {
             if (this.imageRef && crop.width && crop.height) {
+              // blob url is coming into croppedImageUrl
+              // use this for cropped image
               const croppedImageUrl = await this.getCroppedImg(
                 this.imageRef,
                 crop,
@@ -86,7 +88,9 @@ class CropModal extends React.Component {
               crop.width,
               crop.height
             );
-        
+            // to get base64 url
+            // const base64Image = canvas.toDataURL('image/jpeg');
+            // console.log(base64Image);
             return new Promise((resolve, reject) => {
               canvas.toBlob(blob => {
                 if (!blob) {
@@ -144,7 +148,7 @@ class CropModal extends React.Component {
                         )} */}
                     </Modal.Body>
                     <Modal.Footer>
-                    <Button variant="secondary" onClick={this.handleClose}>
+                    <Button variant="primary" onClick={this.handleClose}>
                         Done
                     </Button>
                     </Modal.Footer>
