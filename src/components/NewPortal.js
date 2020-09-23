@@ -40,6 +40,7 @@ class NewPortal extends React.Component {
         this.setState({
             portals
         });
+        console.log('saved data', portal);
         let portals_data = localStorage.getItem('portals') || null;
         let portals_js = null;
         portals_js = JSON.parse(portals_data);

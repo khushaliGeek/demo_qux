@@ -89,7 +89,7 @@ class CropModal extends React.Component {
               crop.height
             );
             // to get base64 url
-            // const base64Image = canvas.toDataURL('image/jpeg');
+            const base64Image = canvas.toDataURL('image/jpeg');
             // console.log(base64Image);
             return new Promise((resolve, reject) => {
               canvas.toBlob(blob => {
@@ -101,8 +101,8 @@ class CropModal extends React.Component {
 
                 window.URL.revokeObjectURL(this.fileUrl);
                 this.fileUrl = window.URL.createObjectURL(blob);
-                console.log(this.props.type, this.fileUrl);
-                resolve(this.fileUrl);
+                console.log(this.props.type, 'generated base64 url');
+                resolve(base64Image);
               }, 'image/jpeg');
             });
           }

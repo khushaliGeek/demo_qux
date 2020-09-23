@@ -253,6 +253,12 @@ class AddPortal extends React.Component {
                         <Form.Group as={Col} controlId="formPortalSource">
                             <Form.Label>Portal Source</Form.Label>
                             <Form.Control placeholder="Portal Source" required as="textarea" value={this.state.portalSource} required onChange={e => this.updateState('portalSource', e.target.value)} />
+                            {/* <Form.File
+                                id="custom-file-portalSource"
+                                label="Portal Source"
+                                // accept="image/*"
+                                custom
+                            /> */}
                         </Form.Group>
                     </Form.Row>
                     <div className="justify-content row pl-3">
