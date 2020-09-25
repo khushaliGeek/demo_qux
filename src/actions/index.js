@@ -56,3 +56,30 @@ export const fetchMainCategories = () => async dispatch => {
         
     }
 }
+
+export const newPortalGeneration = data => async dispatch => {
+    try {
+        let { portalName, portalCategory, portalExplict, authorName, authorProfile, portalDescription, portalProfile, portalBackground, portalDesktop, portals } = data
+        let formData = new FormData();
+        let portalData = {
+            portalName,
+            portalCategory,
+            portalExplict,
+            portalDesktop,
+            portalProfile,
+            portalBackground,
+            authorName,
+            authorProfile,
+            portalDescription
+        };
+        for(let k in portalData) {
+            formData.append(k, portalData[k]);
+        }
+        
+        const portal = await axios.post(`http://127.0.0.1:8000/qux/portal/new`, data);
+
+        console.log(portal);
+    } catch (error) {
+        throw error;
+    }
+}

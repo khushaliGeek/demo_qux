@@ -2,6 +2,8 @@ import React from 'react';
 import Header from './Header';
 import PortalGenerator from './HomeComponents/PortalGenerator';
 import PortalPreview from './HomeComponents/PortalPreview';
+import { connect } from 'react-redux';
+import * as actions from '../actions';
 
 class Home extends React.Component {
 
@@ -67,7 +69,24 @@ class Home extends React.Component {
 
         // save api call only if flag is true
         if(flag) {
+            let portals = localStorage.getItem('portals') || null;
+            if(portals) {
+                portals = JSON.parse(portals);
+            }
+            let data = {
+                portalName,
+                portalCategory,
+                portalExplict,
+                portalDesktop,
+                portalProfile,
+                portalBackground,
+                authorName,
+                authorProfile,
+                portalDescription,
+                portals
+            };
 
+            this.props.newPortalGeneration(data);
         }
     }
 
@@ -93,4 +112,4 @@ class Home extends React.Component {
     }
 }
 
-export default Home;
+export default connect(null, actions)(Home);

@@ -46,10 +46,13 @@ class NewPortal extends React.Component {
         portals_js = JSON.parse(portals_data);
         // updatable data are handled here
         if(updateData) {
-            if(portals_js[updateIndex]) {
-                portals_js[updateIndex] = portal;
-                localStorage.setItem('portals', JSON.stringify(portals_js));
+            if (portals_js) {
+                if (portals_js[updateIndex]) {
+                    portals_js[updateIndex] = portal;
+                    localStorage.setItem('portals', JSON.stringify(portals_js));
+                }
             }
+            
         } else {
             // new data are added to the local store
             if(portals_data) {

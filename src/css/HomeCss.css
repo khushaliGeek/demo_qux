@@ -78,3 +78,9 @@
   transform: translateY(-40%);
   align-items: center;
 }
+
+.image-picker {
+  border: 2px dashed grey;
+  cursor: pointer;
+  aspect-ratio: 16/9;
+}

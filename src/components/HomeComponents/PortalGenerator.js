@@ -3,6 +3,7 @@ import { Form, Col, Image } from 'react-bootstrap';
 import CropModal from './CropModal';
 import * as actions from '../../actions';
 import { connect } from 'react-redux';
+import { ImageAlt, TrashFill } from 'react-bootstrap-icons';
 
 class PortalGenerator extends React.Component {
 
@@ -190,8 +191,22 @@ class PortalGenerator extends React.Component {
           document.getElementById(id).value = null;
       }
 
+      renderCategories() {
+          let categories = [];
+          if(this.props.mainCategories) {
+              this.props.mainCategories.map((item) => {
+                  categories.push(
+                      <option value={item.cat_name} key={item.cat_id} selected={this.state.portalCategory ? this.state.portalCategory.includes(item.cat_name) || false : false}>{item.cat_name}</option>
+                  );
+              });
+          }
+          
+
+          return categories;
+      }
+
     render() {
-        console.table('mainCategories', this.props.mainCategories);
+        // console.table('mainCategories', this.props.mainCategories);
         return (
             <div className="p-2">
                 <strong>
@@ -208,9 +223,9 @@ class PortalGenerator extends React.Component {
                             <Form.Label>Select Explict</Form.Label>
                             <Form.Control as="select" defaultValue={this.state.portalExplict || 'Choose..'} onChange={e => this.updateState('portalExplict', e.target.value)}>
                                 <option value="">Select one</option>
-                                <option value="Exp 1" selected={this.state.portalExplict === "Exp 1"}>Exp 1</option>
-                                <option value="Exp 2" selected={this.state.portalExplict === "Exp 2"}>Exp 2</option>
-                                <option value="Exp 3" selected={this.state.portalExplict === "Exp 3"}>Exp 3</option>
+                                <option value="Kids" selected={this.state.portalExplict === "Kids"}>Kids</option>
+                                <option value="Teen" selected={this.state.portalExplict === "Teen"}>Teen</option>
+                                <option value="Adult" selected={this.state.portalExplict === "Adult"}>Adult</option>
                             </Form.Control>
                         </Form.Group>
                         
@@ -219,9 +234,9 @@ class PortalGenerator extends React.Component {
                         <Form.Group as={Col} controlId="formCategory">
                             <Form.Label>Category</Form.Label>
                             <Form.Control as="select" ref="portalCategory" defaultValue={this.state.portalCategory} multiple={true} onChange={e => this.updateCategoryState('portalCategory', e)}>
-                                <option value="Video" selected={this.state.portalCategory ? this.state.portalCategory.includes("Video") || false : false}>Video</option>
-                                <option value="Podcast" selected={this.state.portalCategory ? this.state.portalCategory.includes("Podcast") || false : false}>Podcast</option>
-                                <option value="Live" selected={this.state.portalCategory ? this.state.portalCategory.includes("Live") || false : false}>Live</option>
+                               {
+                                   this.renderCategories()
+                               }
                             </Form.Control>
                         </Form.Group>
                         
@@ -235,21 +250,25 @@ class PortalGenerator extends React.Component {
                         </Form.Group> 
                     </Form.Row>
                     {/* profile image for portal */}
-                    <div className="justify-content row pl-3">
+                    {/* <div className="justify-content row pl-3">
                         {
                             this.state.portalProfile ?
                             <div className="text-center">
                                 <Image  alt="profile" src={this.state.portalProfile} height="120" rounded />
-                                <br />
-                                <input type="button" className="btn btn-danger m-1" value="Remove" onClick={e => this.clearSelection(e, 'custom-file-profile', 'portalProfile')} />
+                                <button type="button" className="btn btn-danger mr-1" onClick={e => this.clearSelection(e, 'custom-file-profile', 'portalProfile')}>
+                                    <TrashFill color="red" size={18} style={{ cursor: 'pointer' }} />
+                                </button>
                             </div>
                             :
                             null
-                        }
-                        <Form.Group as={Col} controlId="formPortalProfile">
+                        } */}
+                        {/* <p
+                            onClick={e => document.getElementById('customfileprofile').click()}
+                        >Click</p> */}
+                        {/* <Form.Group as={Col} controlId="formPortalProfile">
                             <Form.Label>Portal Profile Image</Form.Label>
                             <Form.File 
-                                id="custom-file-profile"
+                                id="customfileprofile"
                                 label="Portal profile"
                                 accept="image/*"
                                 custom
@@ -275,23 +294,46 @@ class PortalGenerator extends React.Component {
                             <CropModal type="profile" aspect={ 1 } imgSrc={this.state.portalProfile} onClose={this.onModalClose} />
                             :
                             null
-                        }
+                        } */}
                         
-                    </div>
+                    {/* </div> */}
                     {/* background image for portal */}
                     <div className="justify-content row pl-3">
                         {
                             this.state.portalBackground ?
                             <div className="text-center">
                                 <Image  alt="bakground" src={this.state.portalBackground} height="135" width="240" rounded />
-                                <br />
-                                <input type="button" className="btn btn-danger m-1" value="Remove" onClick={e => this.clearSelection(e, 'custom-file-background', 'portalBackground')} />
+                                <button
+                                    type="button"
+                                    className="btn mr-1"
+                                    onClick={e => this.clearSelection(e, 'custom-file-background', 'portalBackground')}
+                                >
+                                    <TrashFill color="red" size={18} style={{ cursor: 'pointer' }} />
+                                </button>
                             </div>
                             :
-                            null
+                            <div className="image-picker p-4">
+                                <ImageAlt color="grey" className="" size={30} onClick={() => document.getElementById('custom-file-background').click()} />
+                            </div>
+                            
                         }
-                        <Form.Group as={Col} controlId="formPortalBackground">
-                            <Form.Label>Portal Background Image</Form.Label>
+                        &nbsp;
+                        <div className="my-auto">
+                            <Form.Text className="text-muted">
+                                Upload background Image (1920px X 1080px)
+                                &nbsp;
+                            <i>
+                                    jpg, jpeg, png
+                            </i>
+                                <br />
+                                <strong>(Max size 1MB)</strong>
+                                <br />
+                                <strong className="text-danger">{this.state.backgroundError}</strong>
+                            </Form.Text>
+                        </div>
+                        
+                        <Form.Group as={Col} controlId="formPortalBackground" className="invisible">
+                            {/* <Form.Label>Portal Background Image</Form.Label> */}
                             <Form.File 
                                 id="custom-file-background"
                                 label="Portal Background"
@@ -302,17 +344,7 @@ class PortalGenerator extends React.Component {
                                     this.updateState('backgroundCrop', true);
                                 }}
                             />
-                            <Form.Text className="text-muted">
-                                Upload background Image (1920px X 1080px)
-                                &nbsp;
-                                <i>
-                                    jpg, jpeg, png
-                                </i>
-                                <br />
-                                <strong>(Max size 1MB)</strong>
-                                <br />
-                                <strong className="text-danger">{this.state.backgroundError}</strong>
-                            </Form.Text>
+                            
                         </Form.Group>
                         {
                             this.state.portalBackground && this.state.backgroundCrop ? 
@@ -321,22 +353,23 @@ class PortalGenerator extends React.Component {
                             null
                         }
                     </div>
-                    <strong className="my-4">
+                    {/* <strong className="my-4">
                         Authors
-                    </strong>
+                    </strong> */}
                     {/* <br /> */}
-                    <Form.Group as={Col} controlId="formAuthorName">
+                    {/* <Form.Group as={Col} controlId="formAuthorName">
                         <Form.Label>Author Name</Form.Label>
                         <Form.Control placeholder="Author Name" value={this.state.authorName || ''} onChange={e => this.updateState('authorName', e.target.value)} />
-                    </Form.Group>
+                    </Form.Group> */}
                     {/* author profile image */}
-                    <div className="justify-content row pl-3">
+                    {/* <div className="justify-content row pl-3">
                         {
                             this.state.authorProfile ? 
                             <div className="text-center">
                                 <Image alt="author" src={this.state.authorProfile} height="120" rounded />
-                                <br />
-                                <input type="button" className="btn btn-danger m-1" value="Remove" onClick={e => this.clearSelection(e, 'custom-file-author', 'authorProfile')} />
+                                <button type="button" className="btn btn-danger mr-1" onClick={e => this.clearSelection(e, 'custom-file-author', 'authorProfile')}>
+                                    <TrashFill color="red" size={18} style={{ cursor: 'pointer' }} />
+                                </button>
                             </div>
                             :
                             null
@@ -371,9 +404,9 @@ class PortalGenerator extends React.Component {
                             :
                             null
                         }
-                    </div>
+                    </div> */}
 
-                    <div className="p-2">
+                    <div className="mt-5">
                         <button type="submit" className="btn btn-primary w-50" style={{ backgroundColor: '#6193C4' }}><b>SAVE</b></button>
                     </div>
                 </Form>

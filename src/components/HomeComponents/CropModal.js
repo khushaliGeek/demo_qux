@@ -76,7 +76,7 @@ class CropModal extends React.Component {
             const ctx = canvas.getContext('2d');
             canvas.width = crop.width;
             canvas.height = crop.height;
-        
+            
             ctx.drawImage(
               image,
               crop.x * scaleX,
@@ -90,7 +90,6 @@ class CropModal extends React.Component {
             );
             // to get base64 url
             const base64Image = canvas.toDataURL('image/jpeg');
-            // console.log(base64Image);
             return new Promise((resolve, reject) => {
               canvas.toBlob(blob => {
                 if (!blob) {
@@ -148,9 +147,9 @@ class CropModal extends React.Component {
                         )} */}
                     </Modal.Body>
                     <Modal.Footer>
-                    <Button variant="primary" onClick={this.handleClose}>
-                        Done
-                    </Button>
+                      <Button variant="primary" onClick={this.handleClose}>
+                          Done
+                      </Button>
                     </Modal.Footer>
                 </Modal>
             </div>

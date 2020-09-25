@@ -101,8 +101,8 @@ class PortalPreview extends React.Component {
                     <div className="p-2" id="main-body-window" style={{ backgroundImage: `url(${portalBackground})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>
                         <div className="row justify-content-between p-4 mt-3">
                             <div className="col-4 align-self-end">
-                                <div className="rounded" style={{ height: 200, width: 200, backgroundColor: 'white' }}>
-                                    <Image src={portalProfile} height="200" width="200" alt="profile" rounded />
+                                <div className="rounded" style={{ height: 200, width: 200, backgroundColor: 'transparent' }}>
+                                    {/* <Image src={portalProfile} height="200" width="200" alt="profile" rounded /> */}
                                 </div>
                             </div>
                             {

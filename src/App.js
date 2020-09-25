@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import * as actions from './actions';
 import NewPortal from './components/NewPortal';
 import Logout from './components/Logout';
+import Dashboard from './components/Dashboard';
+import MyPortal from './components/MyPortal';
 
 class App extends React.Component {
 
@@ -47,13 +49,15 @@ class App extends React.Component {
       case false:
         return (
           <React.Fragment>
-            <Route exact path="/" component={Login} />
+            <Route exact path="*" component={Login} />
           </React.Fragment>
         );
       default:
         return (
           <React.Fragment>
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" component={Dashboard} />
+            <Route exact path="/myportals" component={MyPortal} />
+            <Route exact path="/portalGenerator" component={Home} />
             <Route exact path="/newPortal" component={NewPortal} />
             <Route exact path="/logout" component={Logout} />
           </React.Fragment>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChevronLeft, PlusCircleFill } from 'react-bootstrap-icons';
+import { ChevronLeft, ImageAlt, PlusCircleFill, TrashFill } from 'react-bootstrap-icons';
 import { Form, Col, Image } from 'react-bootstrap';
 import CropModal from '../HomeComponents/CropModal';
 import PlayList from './PlayList';
@@ -129,6 +129,7 @@ class AddPortal extends React.Component {
                     index: i,
                     iconError: null,
                     iconCrop: false,
+                    tags: []
                 };
                 data.push(playlist);
             } else {
@@ -192,8 +193,10 @@ class AddPortal extends React.Component {
         }
         if(key === "name") {
             playlist.name = value;
-        } else {
-            playlist.source = value
+        } else if(key == "tags") {
+            playlist.tags = value;
+        } else if(key == "source") {
+            playlist.source = value;
         }
         data[index-1] = playlist;
 
@@ -215,7 +218,6 @@ class AddPortal extends React.Component {
                 });
             }
         }
-        
     }
 
     renderRedirect() {
@@ -237,22 +239,23 @@ class AddPortal extends React.Component {
                     </ReactTooltip>
                     <Link to="/" data-tip data-for="goBackTip"><ChevronLeft color="black" size={18} /></Link>
                     &nbsp;
-                    <strong>Add Portals</strong>
+                    <strong>Add Subportal</strong>
                 </div>
                 <Form className="p-2" onSubmit={e => this.handleSubmit(e)}>
                     <Form.Row>
                         <Form.Group as={Col} controlId="formPortalType">
-                            <Form.Label>Portal Category</Form.Label>
-                            <Form.Control as="select" required multiple={true} defaultValue={this.state.portalCategory} onChange={e => this.updateCategoryState('portalCategory', e)}>
-                                <option value="A" selected={this.state.portalCategory ? this.state.portalCategory.includes('A') : false}>A</option>
-                                <option value="B" selected={this.state.portalCategory ? this.state.portalCategory.includes('B') : false}>B</option>
-                                <option value="C" selected={this.state.portalCategory ? this.state.portalCategory.includes('C') : false}>C</option>
-                                <option value="D" selected={this.state.portalCategory ? this.state.portalCategory.includes('D') : false}>D</option>
+                            <Form.Label>Subportal Category</Form.Label>
+                            <Form.Control as="select" required multiple={false} defaultValue={this.state.portalCategory} onChange={e => this.updateCategoryState('portalCategory', e)}>
+                                <option value="">Select one</option>
+                                <option value="Video" selected={this.state.portalCategory ? this.state.portalCategory.includes('Video') : false}>Video</option>
+                                <option value="Podcasts" selected={this.state.portalCategory ? this.state.portalCategory.includes('Podcasts') : false}>Podcasts</option>
+                                <option value="Live" selected={this.state.portalCategory ? this.state.portalCategory.includes('Live') : false}>Live</option>
+                                <option value="Blog" selected={this.state.portalCategory ? this.state.portalCategory.includes('Blog') : false}>Blog</option>
                             </Form.Control>
                         </Form.Group>
                         <Form.Group as={Col} controlId="formPortalSource">
-                            <Form.Label>Portal Source</Form.Label>
-                            <Form.Control placeholder="Portal Source" required as="textarea" value={this.state.portalSource} required onChange={e => this.updateState('portalSource', e.target.value)} />
+                            <Form.Label>Subportal Source</Form.Label>
+                            <Form.Control placeholder="Subportal Source" required  value={this.state.portalSource} required onChange={e => this.updateState('portalSource', e.target.value)} />
                             {/* <Form.File
                                 id="custom-file-portalSource"
                                 label="Portal Source"
@@ -266,26 +269,19 @@ class AddPortal extends React.Component {
                             this.state.portalTile ?
                             <div className="text-center">
                                 <Image  alt="Tile" src={this.state.portalTile} height="120" rounded />
-                                <br />
-                                <input type="button" className="btn btn-danger m-1" value="Remove" onClick={e => this.clearSelection(e, 'custom-file-tile', 'portalTile')} />
+                                <button type="button" className="btn" value="Remove" onClick={e => this.clearSelection(e, 'custom-file-tile', 'portalTile')}>
+                                    <TrashFill color="red" size={18} style={{ cursor: 'pointer' }} />
+                                </button>
                             </div>
                             :
-                            null
+                            <div className="image-picker p-4">
+                                <ImageAlt color="grey" size={30} onClick={() => document.getElementById('custom-file-tile').click()} />
+                            </div>
                         }
-                        <Form.Group as={Col} controlId="formPortalProfile">
-                            <Form.Label>Upload Portal Tile Icon</Form.Label>
-                            <Form.File 
-                                id="custom-file-tile"
-                                label="Portal Tile Icon"
-                                accept="image/*"
-                                custom
-                                onChange={ e => {
-                                    this.updatePhotoState('portalTile', e.target.files[0], 'tileError', 500*1024);
-                                    this.setState({ portalTileCrop: true });
-                                } }
-                            />
+                        &nbsp;
+                        <div className="my-auto">
                             <Form.Text className="text-muted">
-                                Upload Portal Tile Icon (100px X 100px)
+                                Upload Subportal Tile Icon (100px X 100px)
                                 &nbsp;
                                 <i>
                                     jpg, jpeg, png
@@ -295,6 +291,20 @@ class AddPortal extends React.Component {
                                 <br />
                                 <strong className="text-danger">{this.state.tileError}</strong>
                             </Form.Text>
+                        </div>
+                        <Form.Group as={Col} controlId="formPortalProfile" className="invisible">
+                            {/* <Form.Label>Upload Subportal Tile Icon</Form.Label> */}
+                            <Form.File 
+                                id="custom-file-tile"
+                                label="Subportal Tile Icon"
+                                accept="image/*"
+                                custom
+                                onChange={ e => {
+                                    this.updatePhotoState('portalTile', e.target.files[0], 'tileError', 500*1024);
+                                    this.setState({ portalTileCrop: true });
+                                } }
+                            />
+
                         </Form.Group>
                         {
                             this.state.portalTile && this.state.portalTileCrop ? 
@@ -303,17 +313,17 @@ class AddPortal extends React.Component {
                             null
                         }
                     </div>
-                    <Form.Group as={Col} controlId="formDescription">
+                    {/* <Form.Group as={Col} controlId="formDescription">
                         <Form.Label>Description</Form.Label>
                         <Form.Control as="textarea" maxLength={200} value={this.state.portalDescription} required onChange={e => this.updateState('portalDescription', e.target.value)}>
                         </Form.Control>
                         <Form.Text className="text-muted">
                             (Max 200 characters)
                         </Form.Text>
-                    </Form.Group> 
+                    </Form.Group>  */}
                     <div className="pt-2">
                         <strong>
-                            Playlists
+                            Listing
                         </strong>
                         <div className="p-3 scrollable-playlists">
                             {
@@ -326,7 +336,7 @@ class AddPortal extends React.Component {
                                 place="right"
                                 effect="solid"
                             >
-                                Add playlist from here
+                                Add listing from here
                             </ReactTooltip>
                             <PlusCircleFill color="blue" data-tip data-for="addPlaylistTip" data-placement="right" title="Add Playlist" size={30} style={{ cursor: 'pointer' }} onClick={ e => this.addPlaylist()} />
                         </div>
