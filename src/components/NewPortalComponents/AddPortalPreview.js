@@ -82,7 +82,7 @@ class AddPortalPreview extends React.Component {
     }
 
     render() {
-        let portalProfile = localStorage.getItem('portalProfile') || '';
+        // let portalProfile = localStorage.getItem('portalProfile') || '';
         let portalBackground = localStorage.getItem('portalBackground') || '';
         
         return (

@@ -38,6 +38,8 @@ class App extends React.Component {
     localStorage.removeItem('authorProfile');
     localStorage.removeItem('portalBackground');
     localStorage.removeItem('mainPortal');
+    localStorage.removeItem('portalName');
+    localStorage.removeItem('portalDescription');
   }
 
   
@@ -55,9 +57,9 @@ class App extends React.Component {
       default:
         return (
           <React.Fragment>
-            <Route exact path="/" component={Dashboard} />
-            <Route exact path="/myportals" component={MyPortal} />
-            <Route exact path="/portalGenerator" component={Home} />
+            {/* <Route exact path="/" component={Dashboard} />
+            <Route exact path="/myportals" component={MyPortal} /> */}
+            <Route exact path="/" component={Home} />
             <Route exact path="/newPortal" component={NewPortal} />
             <Route exact path="/logout" component={Logout} />
           </React.Fragment>

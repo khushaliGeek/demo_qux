@@ -19,7 +19,9 @@ export const loginUser = LoginData => async dispatch => {
     try {
         const user = await axios.post(`${baseURL}/login`, formData);
         if(user.data.success) {
+            console.log(user.data.data);
             localStorage.setItem('loggedinUser', user.data.data.user_name);
+            localStorage.setItem('basic_token', user.data.data.token);
             alert('You are loggedin successfully');
         } else {
             alert('Email or password is invalid');
@@ -59,24 +61,32 @@ export const fetchMainCategories = () => async dispatch => {
 
 export const newPortalGeneration = data => async dispatch => {
     try {
-        let { portalName, portalCategory, portalExplict, authorName, authorProfile, portalDescription, portalProfile, portalBackground, portalDesktop, portals } = data
-        let formData = new FormData();
-        let portalData = {
-            portalName,
-            portalCategory,
-            portalExplict,
-            portalDesktop,
-            portalProfile,
-            portalBackground,
-            authorName,
-            authorProfile,
-            portalDescription
-        };
-        for(let k in portalData) {
-            formData.append(k, portalData[k]);
+        // let { portalName, portalCategory, portalExplict, authorName, authorProfile, portalDescription, portalProfile, portalBackground, portalDesktop, portals } = data
+        // let formData = new FormData();
+        // let portalData = {
+        //     portalName,
+        //     portalCategory,
+        //     portalExplict,
+        //     portalDesktop,
+        //     portalProfile,
+        //     portalBackground,
+        //     authorName,
+        //     authorProfile,
+        //     portalDescription
+        // };
+        // for(let k in portalData) {
+        //     formData.append(k, portalData[k]);
+        // }
+
+        let token = localStorage.getItem('basic_token') || null;
+        let headers = {
+            'content-type': 'application/json',
+            "Access-Control-Allow-Origin": "*",
+            "Authorization": `Basic ${token}`
         }
-        
-        const portal = await axios.post(`http://127.0.0.1:8000/qux/portal/new`, data);
+        const portal = await axios.post(`http://127.0.0.1:8000/qux/portal/new`, data, {
+            headers: headers
+        });
 
         console.log(portal);
     } catch (error) {

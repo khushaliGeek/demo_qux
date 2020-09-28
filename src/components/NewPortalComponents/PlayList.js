@@ -4,7 +4,7 @@ import { ImageAlt, TrashFill } from 'react-bootstrap-icons';
 import CropModal from '../HomeComponents/CropModal';
 import ReactTooltip from 'react-tooltip';
 import TagsInput from 'react-tagsinput';
-import 'react-tagsinput/react-tagsinput.css';
+import '../../css/react-tagsinput.css';
 
 class PlayList extends React.Component {
 
@@ -29,7 +29,7 @@ class PlayList extends React.Component {
                 updateData: this.props.updateData
             });
         }
-
+        // console.log('tags', this.props.playlist.tags);
         this.setState({
             tags: this.props.playlist.tags
         });
@@ -175,7 +175,7 @@ class PlayList extends React.Component {
                         </div>
                     </div>
                 </Form.Row>
-                <TagsInput value={this.props.playlist.tags ? this.props.playlist.tags : this.state.tags || []} onChange={ tags => {
+                <TagsInput maxTags={10} value={this.props.playlist.tags ? this.props.playlist.tags : this.state.tags || []} onChange={ tags => {
                     this.props.onData('tags', tags, this.props.count);
                     this.setState({ tags });
                 }} />

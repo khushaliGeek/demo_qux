@@ -13,7 +13,7 @@ class PortalGenerator extends React.Component {
         this.canvas = {};
         this.state = {
             portalName: null,
-            portalCategory: null,
+            portalCategory: [],
             portalExplict: null,
             portalDescription: null,
             portalProfile: null,
@@ -47,6 +47,7 @@ class PortalGenerator extends React.Component {
                 x: 0,
                 y: 0
             },
+            categoryError: null
         };
 
         this.updateState = this.updateState.bind(this);
@@ -58,6 +59,11 @@ class PortalGenerator extends React.Component {
           this.setState({
               [key]: value
           });
+
+          if(key === "portalName" || key === "portalDescription") {
+            //   localStorage.setItem(key, value);
+            this.props.onPhotoSubmit(key, value);
+          }
       }
 
       componentDidMount() {
@@ -106,15 +112,28 @@ class PortalGenerator extends React.Component {
       updateCategoryState(key, e) {
         let options = e.target.options;
         let val = [];
+        console.log(options.selectedOptions);
         for (let i = 0, l = options.length; i < l; i++) {
           if (options[i].selected) {
-            val.push(options[i].value);
+                val.push(options[i].value);
           }
         }
-
+        
         this.setState({
             [key]: val
         });
+        if(val.length > 2) {
+            this.setState({
+                categoryError: 'At most 2 categories can be selected.'
+            });
+        } else {
+            this.setState({
+                categoryError: null
+            });
+        }
+
+        console.log(val, this.state.portalCategory);
+        
       }
 
       updatePhotoState(key, value, errorKey, photoSize) {   
@@ -143,7 +162,11 @@ class PortalGenerator extends React.Component {
 
       handleSubmit(e) {
           e.preventDefault();
-          this.props.onFormSubmit(this.state, true);
+          if(this.state.categoryError) {
+              alert('You can select at most 2 categories');
+          } else {
+              this.props.onFormSubmit(this.state, true);
+          }
       }
 
       onModalClose = (data) => {
@@ -200,7 +223,6 @@ class PortalGenerator extends React.Component {
                   );
               });
           }
-          
 
           return categories;
       }
@@ -217,15 +239,20 @@ class PortalGenerator extends React.Component {
                     <Form.Row>
                         <Form.Group as={Col} controlId="formPortalName">
                             <Form.Label>Portal Name</Form.Label>
-                            <Form.Control placeholder="Portal Name" value={this.state.portalName || null} required onChange={e => this.updateState('portalName', e.target.value)} />
+                            <Form.Control placeholder="Portal Name" value={this.state.portalName || null} required onChange={e => {
+                                    localStorage.setItem('portalName', e.target.value);
+                                    this.updateState('portalName', e.target.value);
+                                }} 
+                            />
                         </Form.Group>
                         <Form.Group as={Col} controlId="formExplict">
-                            <Form.Label>Select Explict</Form.Label>
+                            <Form.Label>Select Rating</Form.Label>
                             <Form.Control as="select" defaultValue={this.state.portalExplict || 'Choose..'} onChange={e => this.updateState('portalExplict', e.target.value)}>
                                 <option value="">Select one</option>
-                                <option value="Kids" selected={this.state.portalExplict === "Kids"}>Kids</option>
-                                <option value="Teen" selected={this.state.portalExplict === "Teen"}>Teen</option>
-                                <option value="Adult" selected={this.state.portalExplict === "Adult"}>Adult</option>
+                                <option value="G" selected={this.state.portalExplict === "G"}>G</option>
+                                <option value="PG13" selected={this.state.portalExplict === "PG13"}>PG13</option>
+                                <option value="Adults" selected={this.state.portalExplict === "Adults"}>Adults</option>
+                                <option value="Explicit" selected={this.state.portalExplict === "Explicit"}>Explicit</option>
                             </Form.Control>
                         </Form.Group>
                         
@@ -238,11 +265,18 @@ class PortalGenerator extends React.Component {
                                    this.renderCategories()
                                }
                             </Form.Control>
+                            <Form.Text className="text-danger" style={{ color: 'red' }}>
+                                {this.state.categoryError}
+                            </Form.Text>
                         </Form.Group>
                         
                         <Form.Group as={Col} controlId="formDescription">
                             <Form.Label>Description</Form.Label>
-                            <Form.Control as="textarea" maxLength={200} value={this.state.portalDescription} required onChange={e => this.updateState('portalDescription', e.target.value)}>
+                            <Form.Control as="textarea" maxLength={200} value={this.state.portalDescription} required onChange={e => {
+                                    localStorage.setItem('portalDescription', e.target.value);
+                                    this.updateState('portalDescription', e.target.value);
+                                }}
+                            >
                             </Form.Control>
                             <Form.Text className="text-muted">
                                 (Max 200 characters)

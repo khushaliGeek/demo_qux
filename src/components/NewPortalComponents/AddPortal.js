@@ -188,8 +188,16 @@ class AddPortal extends React.Component {
         let data = this.state.playlists;
         let playlist = data[index-1];
         
+        
+
         if(!playlist) {
             return;
+        }
+
+        if (key === "tags") {
+            if (playlist.tags.length > 10) {
+                return;
+            }
         }
         if(key === "name") {
             playlist.name = value;

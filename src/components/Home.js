@@ -105,7 +105,7 @@ class Home extends React.Component {
                     <PortalGenerator onFormSubmit={this.handleSubmitData.bind(this)} onPhotoSubmit={this.handlePhotoData.bind(this)} />
                 </div>
                 <div className="col-md-6 col-lg-6" style={{ backgroundColor: '#F9FAFC' }}>
-                    <PortalPreview portalProfile={this.state.portalProfile || null} portalBackground={this.state.portalBackground || null} subportals={this.state.subportals || null} />
+                    <PortalPreview portalProfile={this.state.portalProfile || null} portalBackground={this.state.portalBackground || null} portalName={this.state.portalName || null} portalDescription={this.state.portalDescription || null} subportals={this.state.subportals || null} />
                 </div>
             </div>
         );

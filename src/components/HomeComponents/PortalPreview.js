@@ -78,19 +78,8 @@ class PortalPreview extends React.Component {
     }
 
     render() {
-        console.log('preview portal', this.props.subportals);
-        let portalProfile = localStorage.getItem('portalProfile') || '';
+        // let portalProfile = localStorage.getItem('portalProfile') || '';
         let portalBackground = localStorage.getItem('portalBackground') || '';
-        // if(portalProfile !== '') {
-        //     this.setState({
-        //         portalProfile
-        //     });
-        // }
-        // if(portalBackground !== '') {
-        //     this.setState({
-        //         portalBackground
-        //     });
-        // }
         return (
             <div className="p-2 pt-4">
                 <div className="my-5" id="parent-window">
@@ -99,19 +88,28 @@ class PortalPreview extends React.Component {
                     </strong>
                     <UpperBarWindow />
                     <div className="p-2" id="main-body-window" style={{ backgroundImage: `url(${portalBackground})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover' }}>
-                        <div className="row justify-content-between p-4 mt-3">
-                            <div className="col-4 align-self-end">
-                                <div className="rounded" style={{ height: 200, width: 200, backgroundColor: 'transparent' }}>
+                        <div className="row justify-content-between pt-4 mt-3">
+                            <div className="col-8">
+                                <div className="rounded text-white" style={{ height: 200, backgroundColor: 'transparent' }}>
                                     {/* <Image src={portalProfile} height="200" width="200" alt="profile" rounded /> */}
+                                    <b>
+                                        { this.props.portalName }
+                                    </b>
+                                    <br />
+                                    <small>
+                                    {
+                                        this.props.portalDescription
+                                    }
+                                    </small>
                                 </div>
                             </div>
                             {
                                 portalBackground !== '' ?
-                                <div className="col-8 invisible">
+                                <div className="col-4 invisible">
                                     Background Image 1920px X 1080px
                                 </div>
                                 :
-                                <div className="text-white text-center col-8">
+                                <div className="text-white text-center col-4">
                                     Background Image 1920px X 1080px
                                 </div>
                             }

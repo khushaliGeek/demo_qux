@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import logo from '../img/logo.png';
 import logout from '../img/logout.png';
 import ReactTooltip from 'react-tooltip';
-import Sidebar from 'react-bootstrap-sidebar';
-import { Nav, NavItem } from 'react-bootstrap';
+import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
+import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 
 class Header extends React.Component {
 
@@ -16,18 +16,58 @@ class Header extends React.Component {
         };
     }
 
-    updateModal(inVisible) {
-        this.setState({ inVisible });
-        this.forceUpdate();
-    }
+    
 
     render() {
         return (
             <div className="p-2 row justify-content-between my-auto">
-                {/* <Link to="/" className="pl-2" data-tip data-for="homeTip"> */}
-                    <img src={logo} className="pl-2" height="64" alt="logo" onClick={this.updateModal(true)} />
-                {/* </Link> */}
+                <Link to="/" className="pl-2">
+                    <img src={logo} className="pl-2" height="64" alt="logo" data-tip data-for="homeTip" />
+                </Link>
 
+                <Link to="/" className="pl-2 my-auto">
+                    Portal Generator
+                </Link>
+
+                <Link to="/" className="pl-2 my-auto">
+                    My Portals
+                </Link>
+
+                {/* <SideNav
+                    onSelect={(selected) => {
+                        // Add your code here
+                    }}
+                >
+                    <SideNav.Toggle />
+                    <SideNav.Nav defaultSelected="home">
+                        <NavItem eventKey="home">
+                            <NavIcon>
+                                <i className="fa fa-fw fa-home" style={{ fontSize: '1.75em' }} />
+                            </NavIcon>
+                            <NavText>
+                                Home
+                            </NavText>
+                        </NavItem>
+                        <NavItem eventKey="charts">
+                            <NavIcon>
+                                <i className="fa fa-fw fa-line-chart" style={{ fontSize: '1.75em' }} />
+                            </NavIcon>
+                            <NavText>
+                                Charts
+                            </NavText>
+                            <NavItem eventKey="charts/linechart">
+                                <NavText>
+                                    Line Chart
+                            </NavText>
+                            </NavItem>
+                            <NavItem eventKey="charts/barchart">
+                                <NavText>
+                                    Bar Chart
+                                </NavText>
+                            </NavItem>
+                        </NavItem>
+                    </SideNav.Nav>
+                </SideNav> */}
                 <ReactTooltip
                     id="homeTip"
                     place="bottom"
@@ -35,15 +75,6 @@ class Header extends React.Component {
                 >
                     Go to home
                 </ReactTooltip>
-
-                <Sidebar side='left' isVisible={this.state.flag} onHide={() => this.updateModal(false)}>
-                    <Nav>
-                        <NavItem href="#">Link 1</NavItem>
-                        <NavItem href="#">Link 2</NavItem>
-                        <NavItem href="#">Link 3</NavItem>
-                        <NavItem href="#">Link 4</NavItem>
-                    </Nav>
-                </Sidebar>
 
                 <ReactTooltip
                     id="logoutTip"
