@@ -4,6 +4,9 @@ import CropModal from './CropModal';
 import * as actions from '../../actions';
 import { connect } from 'react-redux';
 import { ImageAlt, TrashFill } from 'react-bootstrap-icons';
+import ProgressBarModal from './ProgressBarModal';
+import { Redirect } from 'react-router-dom';
+import FailedModal from './FailedModal';
 
 class PortalGenerator extends React.Component {
 
@@ -47,7 +50,9 @@ class PortalGenerator extends React.Component {
                 x: 0,
                 y: 0
             },
-            categoryError: null
+            categoryError: null,
+            showProgress: false,
+            showFailedModal: true
         };
 
         this.updateState = this.updateState.bind(this);
@@ -112,7 +117,6 @@ class PortalGenerator extends React.Component {
       updateCategoryState(key, e) {
         let options = e.target.options;
         let val = [];
-        console.log(options.selectedOptions);
         for (let i = 0, l = options.length; i < l; i++) {
           if (options[i].selected) {
                 val.push(options[i].value);
@@ -131,8 +135,6 @@ class PortalGenerator extends React.Component {
                 categoryError: null
             });
         }
-
-        console.log(val, this.state.portalCategory);
         
       }
 
@@ -162,6 +164,9 @@ class PortalGenerator extends React.Component {
 
       handleSubmit(e) {
           e.preventDefault();
+          this.setState({
+              showProgress: true
+          });
           if(this.state.categoryError) {
               alert('You can select at most 2 categories');
           } else {
@@ -227,8 +232,30 @@ class PortalGenerator extends React.Component {
           return categories;
       }
 
+      renderSaveRedirect() {
+          let addStatus = this.props.addPortal;
+
+          if (this.state.showProgress && addStatus === null) {
+              return <ProgressBarModal />;
+          }
+          
+
+        //   as portal is inserted successfully, redirected to my portals page
+          if(this.props.addPortal === true) {
+              this.setState({
+                  showProgress: false
+              });
+              return <Redirect to="/myportals" />;
+          }
+
+        //   if(this.props.addPortal === false || this.props.addPortal === "failed") {
+        //         return (
+        //             <FailedModal setFailedState={() => this.setState({ showProgress: false, showFailedModal: 2 })} />
+        //         );
+        //   }
+      }
+
     render() {
-        // console.table('mainCategories', this.props.mainCategories);
         return (
             <div className="p-2">
                 <strong>
@@ -255,7 +282,6 @@ class PortalGenerator extends React.Component {
                                 <option value="Explicit" selected={this.state.portalExplict === "Explicit"}>Explicit</option>
                             </Form.Control>
                         </Form.Group>
-                        
                     </Form.Row>
                     <Form.Row>
                         <Form.Group as={Col} controlId="formCategory">
@@ -444,14 +470,18 @@ class PortalGenerator extends React.Component {
                         <button type="submit" className="btn btn-primary w-50" style={{ backgroundColor: '#6193C4' }}><b>SAVE</b></button>
                     </div>
                 </Form>
+                {
+                    this.renderSaveRedirect()
+                }
             </div>
         );
     }
 }
 
-function mapStateToProps({ mainCategories }) {
+function mapStateToProps({ mainCategories, addPortal }) {
     return {
-        mainCategories
+        mainCategories,
+        addPortal
     };
 }
 

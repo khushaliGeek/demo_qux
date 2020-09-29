@@ -230,7 +230,7 @@ class AddPortal extends React.Component {
 
     renderRedirect() {
         if(this.state.redirectFlag) {
-            return <Redirect to="/" />
+            return <Redirect to="/portalGenerator" />
         }
     }
 
@@ -245,7 +245,7 @@ class AddPortal extends React.Component {
                     >
                         Go back
                     </ReactTooltip>
-                    <Link to="/" data-tip data-for="goBackTip"><ChevronLeft color="black" size={18} /></Link>
+                    <Link to="/portalGenerator" data-tip data-for="goBackTip"><ChevronLeft color="black" size={18} /></Link>
                     &nbsp;
                     <strong>Add Subportal</strong>
                 </div>
@@ -349,6 +349,7 @@ class AddPortal extends React.Component {
                             <PlusCircleFill color="blue" data-tip data-for="addPlaylistTip" data-placement="right" title="Add Playlist" size={30} style={{ cursor: 'pointer' }} onClick={ e => this.addPlaylist()} />
                         </div>
                     </div>
+                </Form>
                     <div className="p-2 row justify-content-center w-100">
                         {
                             this.renderRedirect()
@@ -356,7 +357,6 @@ class AddPortal extends React.Component {
                         <button type="submit" className="btn btn-primary m-1 p-2 px-5" style={{ backgroundColor: '#6193C4' }} onClick={e => this.saveData(false)}><b>SAVE AND BACK TO HOME</b></button>
                         <button type="submit" className="btn btn-success m-1 p-2 px-5" onClick={e => this.saveData(true)}><b>SAVE AND CONTINUE</b></button>
                     </div>
-                </Form>
             </div>
         );
     }

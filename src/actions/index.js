@@ -1,6 +1,6 @@
-import { FETCH_USER, FETCH_PREVIEW, FETCH_MAIN_CATEGORIES } from './types';
+import { FETCH_USER, FETCH_PREVIEW, FETCH_MAIN_CATEGORIES, FETCH_USER_PORTALS, ADD_PORTAL_SUCCESS } from './types';
 import axios from 'axios';
-const baseURL = 'http://qux.isplace.in/qux'
+const baseURL = 'http://qux.isplace.in/qux';
 
 export const fetchUser = () => dispatch => {
     const name = localStorage.getItem('loggedinUser') || '';
@@ -51,7 +51,16 @@ export const fetchPreview = () => dispatch => {
 
 export const fetchMainCategories = () => async dispatch => {
     try {
-        const categories = await axios.get(`${baseURL}/portal/categories`);
+        let token = localStorage.getItem('basic_token') || null;
+        let headers = {
+            'Content-Type': 'application/json',
+            "Access-Control-Allow-Origin": "*",
+            "Authorization": `Basic ${token}`,
+            "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, PATCH, OPTIONS"
+        }
+        const categories = await axios.get(`${baseURL}/portal/categories`, {
+            headers
+        });
         console.log(categories);
         dispatch({ type: FETCH_MAIN_CATEGORIES, payload: categories.data.data });
     } catch (error) {
@@ -77,18 +86,51 @@ export const newPortalGeneration = data => async dispatch => {
         // for(let k in portalData) {
         //     formData.append(k, portalData[k]);
         // }
+        let mode = localStorage.getItem('editMode') || false;
+        let token = localStorage.getItem('basic_token') || null;
+        let headers = {
+            'content-type': 'application/json',
+            "Access-Control-Allow-Origin": "*",
+            "Authorization": `Basic ${token}`,
+            "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, PATCH"
+        }
+        if(!mode) {
+            console.log('insert mode');
+            const portal = await axios.post(`${baseURL}/portal/new`, data, {
+                headers
+            });
+            if(portal.data.data.success) {
+                dispatch({ type: ADD_PORTAL_SUCCESS, payload: portal.data.data.success });
+            } else {
+                alert('Failed to add portal');
+                dispatch({ type: ADD_PORTAL_SUCCESS, payload: false });
+            }
+        } else {
+            // const portal = await axios.post(`${baseURL}/portal/update`, data, {
+            //     headers
+            // });
+            console.log('update mode');
+            dispatch({ type: ADD_PORTAL_SUCCESS, payload: false });
+        }
+    } catch (error) {
+        throw error;
+    }
+}
 
+export const fetchUserportals = () => async dispatch => {
+    try {
         let token = localStorage.getItem('basic_token') || null;
         let headers = {
             'content-type': 'application/json',
             "Access-Control-Allow-Origin": "*",
             "Authorization": `Basic ${token}`
         }
-        const portal = await axios.post(`http://127.0.0.1:8000/qux/portal/new`, data, {
-            headers: headers
+
+        const portals = await axios.get(`${baseURL}/portal/user`, {
+            headers
         });
 
-        console.log(portal);
+        dispatch({ type: FETCH_USER_PORTALS, payload: portals.data.data });
     } catch (error) {
         throw error;
     }

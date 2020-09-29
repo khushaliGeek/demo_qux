@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../img/logo.png';
-import logout from '../img/logout.png';
+// import logout from '../img/logout.png';
 import ReactTooltip from 'react-tooltip';
-import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
-import '@trendmicro/react-sidenav/dist/react-sidenav.css';
+import { Nav, Navbar } from 'react-bootstrap';
+// import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
+// import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 
 class Header extends React.Component {
 
@@ -16,58 +17,49 @@ class Header extends React.Component {
         };
     }
 
-    
-
     render() {
         return (
-            <div className="p-2 row justify-content-between my-auto">
-                <Link to="/" className="pl-2">
+            <div className="">
+                <Navbar collapseOnSelect expand="lg" bg="light" variant="light">
+                    <Navbar.Brand>
+                        <Link to="/">
+                            <img src={logo} height="64" alt="logo" data-tip data-for="homeTip" />
+                        </Link>
+                    </Navbar.Brand>
+                    <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+                    <Navbar.Collapse id="responsive-navbar-nav">
+                        <Nav className="mr-auto">
+                            <Nav.Link href="/portalGenerator" >
+                                Portal Generator
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/myportals">
+                                My Portals
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/logout">
+                                Logout
+                            </Nav.Link>
+                        </Nav>
+                    </Navbar.Collapse>
+                </Navbar>
+                <ReactTooltip
+                    id="logoutTip"
+                    place="bottom"
+                    effect="solid"
+                >
+                    Logout
+                </ReactTooltip>
+                {/* <Link to="/" className="pl-2">
                     <img src={logo} className="pl-2" height="64" alt="logo" data-tip data-for="homeTip" />
                 </Link>
 
-                <Link to="/" className="pl-2 my-auto">
+                <a href="/portalGenerator" className="pl-2 my-auto">
                     Portal Generator
-                </Link>
+                </a>
 
-                <Link to="/" className="pl-2 my-auto">
+                <Link to="/myportals" className="pl-2 my-auto">
                     My Portals
                 </Link>
 
-                {/* <SideNav
-                    onSelect={(selected) => {
-                        // Add your code here
-                    }}
-                >
-                    <SideNav.Toggle />
-                    <SideNav.Nav defaultSelected="home">
-                        <NavItem eventKey="home">
-                            <NavIcon>
-                                <i className="fa fa-fw fa-home" style={{ fontSize: '1.75em' }} />
-                            </NavIcon>
-                            <NavText>
-                                Home
-                            </NavText>
-                        </NavItem>
-                        <NavItem eventKey="charts">
-                            <NavIcon>
-                                <i className="fa fa-fw fa-line-chart" style={{ fontSize: '1.75em' }} />
-                            </NavIcon>
-                            <NavText>
-                                Charts
-                            </NavText>
-                            <NavItem eventKey="charts/linechart">
-                                <NavText>
-                                    Line Chart
-                            </NavText>
-                            </NavItem>
-                            <NavItem eventKey="charts/barchart">
-                                <NavText>
-                                    Bar Chart
-                                </NavText>
-                            </NavItem>
-                        </NavItem>
-                    </SideNav.Nav>
-                </SideNav> */}
                 <ReactTooltip
                     id="homeTip"
                     place="bottom"
@@ -86,7 +78,7 @@ class Header extends React.Component {
 
                 <Link to="/logout" className="my-auto" data-tip data-for="logoutTip">
                     <img src={logout} height="32" alt="logout" className="text-center" />
-                </Link>
+                </Link> */}
             </div>
         );
     }

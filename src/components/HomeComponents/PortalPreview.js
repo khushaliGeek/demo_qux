@@ -2,7 +2,7 @@ import React from 'react';
 import '../../css/HomeCss.css';
 import plus_sign from '../../img/plus_sign.png';
 import UpperBarWindow from './UpperBarWindow';
-import { Image } from 'react-bootstrap';
+// import { Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import ReactTooltip from 'react-tooltip';
 
