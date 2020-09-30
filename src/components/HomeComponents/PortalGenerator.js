@@ -4,9 +4,7 @@ import CropModal from './CropModal';
 import * as actions from '../../actions';
 import { connect } from 'react-redux';
 import { ImageAlt, TrashFill } from 'react-bootstrap-icons';
-import ProgressBarModal from './ProgressBarModal';
-import { Redirect } from 'react-router-dom';
-import FailedModal from './FailedModal';
+import ProgressBarModal from '../ProgressBarModal';
 
 class PortalGenerator extends React.Component {
 
@@ -52,7 +50,7 @@ class PortalGenerator extends React.Component {
             },
             categoryError: null,
             showProgress: false,
-            showFailedModal: true
+            showFailedModal: false
         };
 
         this.updateState = this.updateState.bind(this);
@@ -107,6 +105,9 @@ class PortalGenerator extends React.Component {
       }
 
       componentWillUnmount() {
+        this.setState({
+            showProgress: false
+        });
         this.props.onFormSubmit(this.state, false);
       }
 
@@ -164,12 +165,13 @@ class PortalGenerator extends React.Component {
 
       handleSubmit(e) {
           e.preventDefault();
-          this.setState({
-              showProgress: true
-          });
+          
           if(this.state.categoryError) {
               alert('You can select at most 2 categories');
           } else {
+              this.setState({
+                  showProgress: true
+              });
               this.props.onFormSubmit(this.state, true);
           }
       }
@@ -233,26 +235,18 @@ class PortalGenerator extends React.Component {
       }
 
       renderSaveRedirect() {
-          let addStatus = this.props.addPortal;
 
-          if (this.state.showProgress && addStatus === null) {
-              return <ProgressBarModal />;
-          }
-          
-
-        //   as portal is inserted successfully, redirected to my portals page
-          if(this.props.addPortal === true) {
+        // as portal is inserted successfully, redirected to my portals page
+          if(this.props.addPortal && this.state.showProgress) {
               this.setState({
                   showProgress: false
               });
-              return <Redirect to="/myportals" />;
+              window.location.href = "/myportals";
           }
 
-        //   if(this.props.addPortal === false || this.props.addPortal === "failed") {
-        //         return (
-        //             <FailedModal setFailedState={() => this.setState({ showProgress: false, showFailedModal: 2 })} />
-        //         );
-        //   }
+          if (this.state.showProgress) {
+                return <ProgressBarModal title="Saving" />;
+          }
       }
 
     render() {
@@ -383,7 +377,7 @@ class PortalGenerator extends React.Component {
                                 Upload background Image (1920px X 1080px)
                                 &nbsp;
                             <i>
-                                    jpg, jpeg, png
+                                jpg, jpeg, png
                             </i>
                                 <br />
                                 <strong>(Max size 1MB)</strong>

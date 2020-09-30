@@ -187,8 +187,6 @@ class AddPortal extends React.Component {
     addPlayListData(key, value, index) {
         let data = this.state.playlists;
         let playlist = data[index-1];
-        
-        
 
         if(!playlist) {
             return;
@@ -253,12 +251,12 @@ class AddPortal extends React.Component {
                     <Form.Row>
                         <Form.Group as={Col} controlId="formPortalType">
                             <Form.Label>Subportal Category</Form.Label>
-                            <Form.Control as="select" required multiple={false} defaultValue={this.state.portalCategory} onChange={e => this.updateCategoryState('portalCategory', e)}>
+                            <Form.Control as="select" required multiple={false} defaultValue={this.state.portalCategory} onChange={e => this.updateState('portalCategory', e.target.value)}>
                                 <option value="">Select one</option>
-                                <option value="Video" selected={this.state.portalCategory ? this.state.portalCategory.includes('Video') : false}>Video</option>
-                                <option value="Podcasts" selected={this.state.portalCategory ? this.state.portalCategory.includes('Podcasts') : false}>Podcasts</option>
-                                <option value="Live" selected={this.state.portalCategory ? this.state.portalCategory.includes('Live') : false}>Live</option>
-                                <option value="Blog" selected={this.state.portalCategory ? this.state.portalCategory.includes('Blog') : false}>Blog</option>
+                                <option value="Video" selected={this.state.portalCategory === 'Video'}>Video</option>
+                                <option value="Podcasts" selected={this.state.portalCategory === 'Podcasts'}>Podcasts</option>
+                                <option value="Live" selected={this.state.portalCategory === 'Live'}>Live</option>
+                                <option value="Blog" selected={this.state.portalCategory === 'Blog'}>Blog</option>
                             </Form.Control>
                         </Form.Group>
                         <Form.Group as={Col} controlId="formPortalSource">

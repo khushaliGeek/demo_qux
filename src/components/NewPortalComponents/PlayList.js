@@ -97,7 +97,7 @@ class PlayList extends React.Component {
                     <Form.Label><big><b>{this.props.count}.</b></big></Form.Label>
                     <Form.Group as={Col} controlId="formPlayList">
                         <Form.Control placeholder="Name" value={this.props.playlist.name || 'name here...'} onChange={e => this.props.onData('name', e.target.value, this.props.count)} />
-                    </Form.Group>
+                    </Form.Group> 
                     <Form.Group as={Col} controlId="formSourceLink">
                         <Form.Control placeholder="Source" value={this.props.playlist.source || 'source here...'} onChange={e => this.props.onData('source', e.target.value, this.props.count)} />
                     </Form.Group>

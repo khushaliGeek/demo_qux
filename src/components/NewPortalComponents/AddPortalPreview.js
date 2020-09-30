@@ -36,12 +36,10 @@ class AddPortalPreview extends React.Component {
                     <div className="rounded my-auto ml-1" style={{ height: 40, width: 40, backgroundColor: 'white' }}>
                         <Image src={data[i].icon} height="40" width="40" rounded alt="icon" />
                     </div>
-                    <div className="mx-auto">
+                    <div className="col">
                         <small>
-                            <b>{data[i].name}</b>
+                            {data[i].name}
                         </small>
-                        <br />
-                        <small>{data[i].source}</small> 
                     </div>
                 </div>
             );
@@ -65,10 +63,8 @@ class AddPortalPreview extends React.Component {
                         </div>
                         <div className="col-8">
                             <small>
-                                <b>Name</b>
+                                Name
                             </small>
-                            <br />
-                            <small>Source</small> 
                         </div>
                     </div>
                 );

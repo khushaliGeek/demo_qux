@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 import Header from './Header';
+import ProgressBarModal from './ProgressBarModal';
 import Portal from './MyPortalComponents/Portal';
 
 class MyPortal extends React.Component {
@@ -39,11 +40,17 @@ class MyPortal extends React.Component {
         return (
             <div className="">
                 <Header />
-                <div className="row container mx-auto">
-                    {
-                        this.renderContent()
-                    }
-                </div>
+                {
+                    this.props.userPortals ?
+                        <div className="row container mx-auto">
+                            {
+                                this.renderContent()
+                            }
+                        </div>
+                    :
+                        <ProgressBarModal title="Fetching Portals" />
+                }
+                
             </div>
         );
     }

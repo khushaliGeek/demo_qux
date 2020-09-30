@@ -25,6 +25,7 @@ class Home extends React.Component {
     }
 
     componentDidMount() {
+        document.title = "QUX Media - Portal Generator";
         let portals = localStorage.getItem('portals') || null;
         let mainPortal = localStorage.getItem('mainPortal') || null;
         if(portals) {

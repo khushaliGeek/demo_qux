@@ -6,7 +6,6 @@ import * as actions from '../actions';
 class Logout extends React.Component {
 
     componentDidMount() {
-        alert('By logging out, you will lose all portal data.');
         this.props.logoutUser();
     }
 

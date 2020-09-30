@@ -2,10 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import logo from '../img/logo.png';
 // import logout from '../img/logout.png';
-import ReactTooltip from 'react-tooltip';
+// import ReactTooltip from 'react-tooltip';
 import { Nav, Navbar } from 'react-bootstrap';
-// import SideNav, { Toggle, Nav, NavItem, NavIcon, NavText } from '@trendmicro/react-sidenav';
-// import '@trendmicro/react-sidenav/dist/react-sidenav.css';
 
 class Header extends React.Component {
 
@@ -28,26 +26,21 @@ class Header extends React.Component {
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
-                        <Nav className="mr-auto">
-                            <Nav.Link href="/portalGenerator" >
+                        <Nav className="ml-auto">
+                            <Nav.Link href="/portalGenerator" className="text-primary">
                                 Portal Generator
                             </Nav.Link>
-                            <Nav.Link as={Link} to="/myportals">
+                            <Nav.Link as={Link} to="/myportals" className="text-primary">
                                 My Portals
                             </Nav.Link>
-                            <Nav.Link as={Link} to="/logout">
+                            <Nav.Link as={Link} to="/logout" className="text-primary">
                                 Logout
                             </Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Navbar>
-                <ReactTooltip
-                    id="logoutTip"
-                    place="bottom"
-                    effect="solid"
-                >
-                    Logout
-                </ReactTooltip>
+
+                {/* old design of header */}
                 {/* <Link to="/" className="pl-2">
                     <img src={logo} className="pl-2" height="64" alt="logo" data-tip data-for="homeTip" />
                 </Link>

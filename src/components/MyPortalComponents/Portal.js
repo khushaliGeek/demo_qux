@@ -24,31 +24,40 @@ class Portal extends React.Component {
         localStorage.setItem('editMode', true);
         localStorage.setItem('editID', portal_id);
         localStorage.setItem('mainPortal', JSON.stringify(data));
-        localStorage.setItem('portalBackground', `http://${portal_background}`)
+        localStorage.setItem('portalBackground', portal_background)
         let subportals_data = [];
+        let editableIDs = [];
         subportals.map((item) => {
-            let { subportal_category, subportal_icon, subportal_source, playlists } = item;
+            let { subportal_id, subportal_category, subportal_icon, subportal_source, playlists } = item;
+            // let ids = {
+            //     subportal: subportal_id,
+            //     playlists: []
+            // }
+            editableIDs.push(subportal_id);
             let temp = {
                 portalCategory: subportal_category,
                 portalSource: subportal_source,
-                portalTile: `http://${subportal_icon}`
+                portalTile: subportal_icon
             };
             let plays = [];
             playlists.map((item) => {
-                let { play_name, play_source, play_image, play_tags } = item;
+                let { play_id, play_name, play_source, play_image, play_tags } = item;
+                // ids.playlists.push(play_id);
                 let play_temp = {
+                    play_id,
                     name: play_name,
                     source: play_source,
-                    icon: `http://${play_image}`,
+                    icon: play_image,
                     tags: play_tags.split(",")
                 }
                 plays.push(play_temp);
             });
             temp.playlists = plays;
             subportals_data.push(temp);
+            // editableIDs.push(ids);
         });
         localStorage.setItem('portals', JSON.stringify(subportals_data));
-
+        localStorage.setItem('subportalIDs', JSON.stringify(editableIDs));
         this.setState({ redirect: true });
     }
 
@@ -59,14 +68,16 @@ class Portal extends React.Component {
         }
         return (
             <div key={portal_id} style={{ padding: 10 }} className="mx-auto">
-                <Card style={{ width: '18rem' }}>
-                    <Card.Img variant="top" src={'http://' + portal_background} alt="background" />
+                <Card style={{ width: '18rem', boxShadow: '5px 5px 10px #e5e5e5' }}>
+                    <Card.Img variant="top" src={portal_background} alt="background" />
                     <Card.Body>
                         <Card.Title>
                             { portal_name }
                         </Card.Title>
                         <Card.Text>
-                            { portal_desc }
+                            <small>
+                                { portal_desc }
+                            </small>
                         </Card.Text>
                         <Button variant="primary" onClick={e => this.setPortalToLocal(this.props.item)}>Edit</Button>
                     </Card.Body>

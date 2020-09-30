@@ -3,24 +3,19 @@ import { Modal, ProgressBar } from 'react-bootstrap';
 
 class ProgressBarModal extends React.Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-
-        }
-    }
-
     render() {
         return (
             <Modal
+                size="sm"
                 show={true}
-                // onHide={}
                 backdrop="static"
                 keyboard={true}
+                centered
             >
                 <Modal.Header>
-                    <Modal.Title>Saving...</Modal.Title>
+                    <Modal.Title>
+                        {this.props.title}...
+                    </Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>

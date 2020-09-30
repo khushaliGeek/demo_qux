@@ -70,22 +70,6 @@ export const fetchMainCategories = () => async dispatch => {
 
 export const newPortalGeneration = data => async dispatch => {
     try {
-        // let { portalName, portalCategory, portalExplict, authorName, authorProfile, portalDescription, portalProfile, portalBackground, portalDesktop, portals } = data
-        // let formData = new FormData();
-        // let portalData = {
-        //     portalName,
-        //     portalCategory,
-        //     portalExplict,
-        //     portalDesktop,
-        //     portalProfile,
-        //     portalBackground,
-        //     authorName,
-        //     authorProfile,
-        //     portalDescription
-        // };
-        // for(let k in portalData) {
-        //     formData.append(k, portalData[k]);
-        // }
         let mode = localStorage.getItem('editMode') || false;
         let token = localStorage.getItem('basic_token') || null;
         let headers = {
@@ -94,23 +78,35 @@ export const newPortalGeneration = data => async dispatch => {
             "Authorization": `Basic ${token}`,
             "Access-Control-Allow-Methods": "PUT, POST, GET, DELETE, PATCH"
         }
+        // insert mode
         if(!mode) {
             console.log('insert mode');
             const portal = await axios.post(`${baseURL}/portal/new`, data, {
                 headers
             });
-            if(portal.data.data.success) {
+            console.log(portal);
+            if(portal.data.data) {
                 dispatch({ type: ADD_PORTAL_SUCCESS, payload: portal.data.data.success });
-            } else {
+            } 
+            if(!portal.data.data) {
                 alert('Failed to add portal');
-                dispatch({ type: ADD_PORTAL_SUCCESS, payload: false });
+                dispatch({ type: ADD_PORTAL_SUCCESS, payload: portal.data.axiossuccess });
             }
         } else {
-            // const portal = await axios.post(`${baseURL}/portal/update`, data, {
-            //     headers
-            // });
+            // update mode
+            let portal_id = localStorage.getItem('editID');
+            let ids = JSON.parse(localStorage.getItem('subportalIDs'));
+            data.portal_id = portal_id;
+            data.subportalIDs = ids;
+            const portal = await axios.post(`${baseURL}/portal/update`, data, {
+                headers
+            });
             console.log('update mode');
-            dispatch({ type: ADD_PORTAL_SUCCESS, payload: false });
+            console.log(portal);
+            if(!portal.data.success) {
+                alert(portal.data.data);
+            }
+            dispatch({ type: ADD_PORTAL_SUCCESS, payload: portal.data.success });
         }
     } catch (error) {
         throw error;
