@@ -13,13 +13,14 @@ class Portal extends React.Component {
     }
 
     setPortalToLocal(portal) {
-        let { portal_id, portal_name, portal_desc, portal_categories, portal_background, portal_explict, subportals, author_name } = portal;
+        let { portal_public, portal_id, portal_name, portal_desc, portal_categories, portal_background, portal_explict, subportals, author_name } = portal;
         let data = {
             portalName: portal_name,
             portalDescription: portal_desc,
             portalCategory: portal_categories.split(","),
             portalExplict: portal_explict,
-            authorName: author_name
+            authorName: author_name,
+            portalPublic: portal_public
         };
         localStorage.setItem('editMode', true);
         localStorage.setItem('editID', portal_id);
@@ -67,7 +68,7 @@ class Portal extends React.Component {
             return <Redirect to="/portalGenerator" />;
         }
         return (
-            <div key={portal_id} style={{ padding: 10 }} className="mx-auto">
+            <div key={portal_id} style={{ padding: 10 }} className="">
                 <Card style={{ width: '18rem', boxShadow: '5px 5px 10px #e5e5e5' }}>
                     <Card.Img variant="top" src={portal_background} alt="background" />
                     <Card.Body>

@@ -64,6 +64,19 @@ class AddPortal extends React.Component {
         }.bind(this);
     }
 
+    updateSourceState(key, value) {
+        this.setState({
+            [key]: null
+        });
+        let reader = new FileReader();
+        let url = reader.readAsDataURL(value);
+        reader.onloadend = async function (e) {
+            await this.setState({
+                [key]: reader.result,
+            });
+        }.bind(this);
+    }
+
     handleSubmit(e) {
         e.preventDefault();
     }
@@ -116,9 +129,8 @@ class AddPortal extends React.Component {
         let data = this.state.playlists;
         let playlistViews = [];
         for(let i=1; i<=this.state.playlistsCount; i++) {
-            let playlist = null;   
-                     
-            if(data[i-1] === 'deleted') {
+            let playlist = null;         
+            if(data[i-1] === 'deleted' || data[i-1].status) {
                 continue;
             }
             if(!data[i-1]) {
@@ -153,8 +165,15 @@ class AddPortal extends React.Component {
 
     removePlayList(index) {
         let data = this.state.playlists;
-        data[index-1] = 'deleted';
-        // data = data.splice(index-1, 1);
+        console.log('deleting listings is ', data[index-1]);
+        if(data[index-1].play_id) {
+            data[index - 1] = {
+                play_id: data[index-1].play_id,
+                status: 1
+            };
+        } else {
+            data[index-1] = 'deleted';
+        }
         
         this.setState({
             playlists: data,
@@ -199,9 +218,9 @@ class AddPortal extends React.Component {
         }
         if(key === "name") {
             playlist.name = value;
-        } else if(key == "tags") {
+        } else if(key === "tags") {
             playlist.tags = value;
-        } else if(key == "source") {
+        } else if(key === "source") {
             playlist.source = value;
         }
         data[index-1] = playlist;
@@ -261,13 +280,21 @@ class AddPortal extends React.Component {
                         </Form.Group>
                         <Form.Group as={Col} controlId="formPortalSource">
                             <Form.Label>Subportal Source</Form.Label>
-                            <Form.Control placeholder="Subportal Source" required  value={this.state.portalSource} required onChange={e => this.updateState('portalSource', e.target.value)} />
-                            {/* <Form.File
+                            {/* <Form.Control placeholder="Subportal Source" required  value={this.state.portalSource} required onChange={e => this.updateState('portalSource', e.target.value)} /> */}
+                            <Form.File
                                 id="custom-file-portalSource"
-                                label="Portal Source"
+                                label="Subportal Source"
                                 // accept="image/*"
                                 custom
-                            /> */}
+                                onChange={e => this.updateSourceState('portalSource', e.target.files[0])}
+                            />
+                            {
+                                
+                                this.state.portalSource ? 
+                                <a href={this.state.portalSource} target="_blank">Click to see current source</a>
+                                :
+                                null
+                            }
                         </Form.Group>
                     </Form.Row>
                     <div className="justify-content row pl-3">

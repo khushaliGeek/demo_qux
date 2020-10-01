@@ -17,19 +17,43 @@ class MyPortal extends React.Component {
         this.props.fetchUserportals();
     }
 
-    renderContent() {
+    renderPublicContent() {
         let cards = [];
         if(this.props.userPortals) {
             this.props.userPortals.map((item) => {
-                cards.push(
-                    <Portal 
-                        item={item}
-                        key={item.portal_id}
-                        setToLocal={this.setPortalToLocal}
-                    />
-                );
+                if(item.portal_public.toString(10) === "1") {
+                    cards.push(
+                        <Portal
+                            item={item}
+                            key={item.portal_id}
+                            setToLocal={this.setPortalToLocal}
+                        />
+                    );
+                }
+                
             });
             
+        }
+
+        return cards;
+    }
+
+    renderFamilyContent() {
+        let cards = [];
+        if (this.props.userPortals) {
+            this.props.userPortals.map((item) => {
+                if(item.portal_public.toString(10) === "0") {
+                    cards.push(
+                        <Portal
+                            item={item}
+                            key={item.portal_id}
+                            setToLocal={this.setPortalToLocal}
+                        />
+                    );
+                }
+                
+            });
+
         }
 
         return cards;
@@ -40,16 +64,39 @@ class MyPortal extends React.Component {
         return (
             <div className="">
                 <Header />
-                {
-                    this.props.userPortals ?
-                        <div className="row container mx-auto">
-                            {
-                                this.renderContent()
-                            }
-                        </div>
-                    :
-                        <ProgressBarModal title="Fetching Portals" />
-                }
+
+                <div className="container">
+                    <h5>
+                        Public Portals
+                    </h5>
+                    {
+                        this.props.userPortals ?
+                            <div className="row container mx-auto">
+                                {
+                                    this.renderPublicContent()
+                                }
+                            </div>
+                            :
+                            <ProgressBarModal title="Fetching Portals" />
+                    }
+                </div>
+
+                <div className="container">
+                    <h5>
+                        Family Portals
+                    </h5>
+                    {
+                        this.props.userPortals ?
+                            <div className="row container mx-auto">
+                                {
+                                    this.renderFamilyContent()
+                                }
+                            </div>
+                            :
+                            <ProgressBarModal title="Fetching Portals" />
+                    }
+                </div>
+                
                 
             </div>
         );

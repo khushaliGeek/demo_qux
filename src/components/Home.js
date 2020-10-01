@@ -20,6 +20,7 @@ class Home extends React.Component {
             portalBackground: null,
             authorName: null,
             authorProfile: null,
+            portalPublic: null,
             subportals: null
         };
     }
@@ -36,19 +37,20 @@ class Home extends React.Component {
 
         if(mainPortal) {
             let data = JSON.parse(mainPortal);
-            let { portalName, portalCategory, portalExplict, authorName, portalDescription } = data;
+            let { portalName, portalCategory, portalExplict, authorName, portalDescription, portalPublic } = data;
             this.setState({
                 portalName,
                 portalCategory,
                 portalExplict,
                 authorName,
-                portalDescription
+                portalDescription,
+                portalPublic
             });
         }
     }
 
     handleSubmitData(data, flag) {
-        let { portalName, portalCategory, portalExplict, authorName, authorProfile, portalDescription, portalProfile, portalBackground, portalDesktop } = data;
+        let { portalName, portalCategory, portalExplict, portalPublic, authorName, authorProfile, portalDescription, portalProfile, portalBackground, portalDesktop } = data;
         this.setState({
             portalName,
             portalCategory,
@@ -58,14 +60,16 @@ class Home extends React.Component {
             portalBackground,
             authorName,
             authorProfile,
-            portalDescription
+            portalDescription,
+            portalPublic
         });
         localStorage.setItem('mainPortal', JSON.stringify({
             portalName,
             portalCategory,
             portalExplict,
             authorName,
-            portalDescription
+            portalDescription,
+            portalPublic
         }));
 
         // save api call only if flag is true
@@ -84,6 +88,7 @@ class Home extends React.Component {
                 authorName,
                 authorProfile,
                 portalDescription,
+                portalPublic,
                 portals
             };
 

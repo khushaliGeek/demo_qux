@@ -17,7 +17,8 @@ class PlayList extends React.Component {
             iconError: null,
             updateData: false,
             onceBit: true,
-            tags: []
+            tags: [],
+            source: null
         };
     }
 
@@ -57,6 +58,17 @@ class PlayList extends React.Component {
           });
         }.bind(this);
         this.props.onPhoto('icon', value, this.props.count);
+    }
+
+    updateSourceState(key, value) {
+        this.setState({
+            [key]: null
+        });
+        let reader = new FileReader();
+        let url = reader.readAsDataURL(value);
+        reader.onloadend = async function (e) {
+            await this.props.onData('source', reader.result, this.props.count);
+        }.bind(this);
     }
 
     onModalClose = (data) => {
@@ -99,7 +111,20 @@ class PlayList extends React.Component {
                         <Form.Control placeholder="Name" value={this.props.playlist.name || 'name here...'} onChange={e => this.props.onData('name', e.target.value, this.props.count)} />
                     </Form.Group> 
                     <Form.Group as={Col} controlId="formSourceLink">
-                        <Form.Control placeholder="Source" value={this.props.playlist.source || 'source here...'} onChange={e => this.props.onData('source', e.target.value, this.props.count)} />
+                        {/* <Form.Control placeholder="Source" value={this.props.playlist.source || 'source here...'} onChange={e => this.props.onData('source', e.target.value, this.props.count)} /> */}
+                        <Form.File
+                            id="custom-file-listSource"
+                            label="Listing Source"
+                            // accept="image/*"
+                            custom
+                            onChange={e => this.updateSourceState('source', e.target.files[0])}
+                        />
+                        {
+                            this.props.playlist.source ? 
+                            <a href={this.props.playlist.source} target="_blank">Click to see current source</a>
+                            :
+                            null
+                        }
                     </Form.Group>
                 </Form.Row>
                 <Form.Row>

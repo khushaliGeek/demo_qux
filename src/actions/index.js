@@ -1,6 +1,6 @@
 import { FETCH_USER, FETCH_PREVIEW, FETCH_MAIN_CATEGORIES, FETCH_USER_PORTALS, ADD_PORTAL_SUCCESS } from './types';
 import axios from 'axios';
-const baseURL = 'http://qux.isplace.in/qux';
+const baseURL = 'http://127.0.0.1:8000/qux';
 
 export const fetchUser = () => dispatch => {
     const name = localStorage.getItem('loggedinUser') || '';

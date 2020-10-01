@@ -24,6 +24,7 @@ class PortalGenerator extends React.Component {
             profileError: null,
             backgroundError: null,
             authorError: null,
+            portalPublic: -1,
             crop: { x: 0, y: 0 },
             zoom: 1,
             aspect: 3 / 3,
@@ -93,13 +94,14 @@ class PortalGenerator extends React.Component {
 
         if(mainPortal) {
             let data = JSON.parse(mainPortal);
-            let { portalName, portalCategory, portalDescription, authorName, portalExplict } = data;
+            let { portalName, portalCategory, portalDescription, authorName, portalExplict, portalPublic } = data;
             this.setState({
                 portalName,
                 portalCategory,
                 portalDescription,
                 portalExplict,
-                authorName
+                authorName,
+                portalPublic
             });
         }
       }
@@ -277,6 +279,14 @@ class PortalGenerator extends React.Component {
                             </Form.Control>
                         </Form.Group>
                     </Form.Row>
+                    <Form.Group controlId="formExplict">
+                        <Form.Label>Portal Access</Form.Label>
+                        <Form.Control as="select" defaultValue={this.state.portalPublic || 'Choose..'} onChange={e => this.updateState('portalPublic', e.target.value)}>
+                            <option value="">Select one</option>
+                            <option value="1" selected={this.state.portalPublic.toString(10) === "1"}>public</option>
+                            <option value="0" selected={this.state.portalPublic.toString(10) === "0"}>family</option>
+                        </Form.Control>
+                    </Form.Group>
                     <Form.Row>
                         <Form.Group as={Col} controlId="formCategory">
                             <Form.Label>Category</Form.Label>
