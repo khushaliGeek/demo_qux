@@ -130,7 +130,7 @@ class AddPortal extends React.Component {
         let playlistViews = [];
         for(let i=1; i<=this.state.playlistsCount; i++) {
             let playlist = null;         
-            if(data[i-1] === 'deleted' || data[i-1].status) {
+            if(data[i-1] === 'deleted') {
                 continue;
             }
             if(!data[i-1]) {
